@@ -1,0 +1,13 @@
+;fname: TenTest-MakePlots.p2dat
+;
+; Generate direct-tension test plots, one PNG file for each view.
+; Open the direct-tension test project (TenTest.p2prj), and call this
+; plot-generation file via {File: Open into Project: TenTest-MakePlots.p2dat}.
+
+; ####################################
+  plot bitmap view pl-TTspec  size 4000 2400 filename 'pl2D-TTspec.png'
+  plot bitmap view pl-ck_mea  size 4000 2400 filename 'pl2D-ck_mea.png'
+  plot bitmap view pl-msa_mea size 4000 2400 filename 'pl2D-msa_mea.png'
+; ####################################
+return
+;EOF: TenTest-MakePlots.p2dat

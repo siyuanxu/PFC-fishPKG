@@ -1,0 +1,35 @@
+;fname: CompTest.p2dvr
+;
+;  IN:  ctParams.p2dat
+;       Saved State (with corresponding model title):
+;         <cm_matName>-matV : specimen in material vessel
+;  OUT: CompTest.p2log
+;       Saved States (with corresponding model titles):
+;         <cm_matName>-ctN : end of loading stage N (N = 0,1,2,...)
+;                            (loading stage 0 is seating phase)
+;
+;=============================================================================
+set logfile CompTest.p2log
+set log     on truncate
+set echo    on
+
+;#######################################################
+restore ..\SS_ContactBonded2D-matV.p2sav
+
+call ..\..\fistSrc\ck.fis suppress
+call ..\..\fistSrc\ct.fis suppress
+call ctParams.p2dat       suppress
+
+@msOff
+@ckInit
+@ctSeatingPhase
+@ft_ZeroGrainDisplacement
+@ctLoadingPhase
+@ckListData
+;#######################################################
+
+set log off
+gui project save
+exit
+return
+;EOF: CompTest.p2dvr

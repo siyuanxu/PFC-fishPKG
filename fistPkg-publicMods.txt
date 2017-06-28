@@ -1,0 +1,291 @@
+;fname: fistPkg-publicMods.txt
+
+PFC 5.0 FISHTank PUBLIC MODIFICATIONS LIST
+  The version number of PFC 5.0 is given by the command:
+    {list version}.
+  The version number of the PFC 5.0 FISHTank is given in the file:
+    fistSrc\fistPkg-version.txt.
+========================================================================
+
+fistPkg | PFC | Date/Description
+25  | 5.00.30 | 03/20/17
+  Enhancements.
+   1. Support clumped grains to provide general grain shapes --- see the
+      common material parameters cm_shape and cm_ctName. Examples of
+      clumped-grain models for granular materials are given in the Linear and
+      User-Defined Materials Examples in the fistPkg memo. An example of
+      clumped-grain models for bonded materials is given in the Contact-Bonded
+      Material Example.
+   2. Modify crack-tracking logic: (a) to reduce slowdown caused by crack
+      filtering, and (b) by setting default value of ckUpdateRate to be two
+      million --- the cracks are updated (by a call to ckForceUpdate) at the
+      end of each loading stage before creating the SAV file.
+
+24 | 5.00.27 | 10/14/16
+  Enhancements.
+    1. Update PFC 5.0 from 5.00.24 to 5.00.27.
+    2. Fix crack-tracking bug that caused the diameters of some flat-jointed
+       cracks to be assigned to the wrong flat-jointed elements.
+    3. Complete the flat-joint interfaces plot set to display the interface,
+       coordinate systems and discretization.
+    4. Add the faced grain plot set. Known bug: 3D faced grains are not being
+       drawn correctly.
+    5. New technical memo {Flat-Joint Contact Model [version 1]} in
+       Documentation\FlatJointContactModel that provides a comprehensive and
+       fully up to date description of the FJ formulation. There are some
+       minor differences from the PFC 5 docSet. This memo also contains a
+       two-grain test problem (in
+       ExampleProjects\FlatJointContactModel\Test-TwoGrains) and exercises the
+       faced-grain plot set.
+
+23| 5.00.24 | 06/23/16
+  Enhancements.
+    A. Enhance crack monitoring: (1) define the crack gap as the surface gap
+       (associated with the contact model), instead of the gap between the two
+       contacting balls; and (2) enhance crack filtering to display the
+       gap-based filtering criterion in the plot caption.
+    B. Rename master project directories to remove the "my" designator, for
+       example:
+         myMatGen-X ==> MatGen-X, where
+           X = {Linear, ContactBonded, ParallelBonded, FlatJointed, Hill}
+         myCompTest     ==> CompTest
+         myDiamCompTest ==> DiamCompTest
+         myTenTest      ==> TenTest
+
+22| 5.00.24 | 05/16/16
+  Enhancements.
+    A. Replace use of term "deviatoric stress and strain" in Section 5.1
+       {Stress, Strain and Porosity in the Material} of the fistPkg memo with
+       the term "deviator stress and strain." Modify all references to this
+       term in the memo and in the project files, in particular, modify the
+       title and y-axis label in all pl-wsd_wea views.
+    B. Clarify description of the Hertzian component of the hill contact model
+       in Section 1.4 {Hill Material} of Potyondy (2016). Describe the
+       grain-grain system as "two locally elastic spheres." Refer to the
+       Hertzian component of the surface-interaction force model as
+       Hertz-Mindlin springs [replaces use of Hertzian springs], with the
+       Mindlin portion of the term denoting the tangential response. Provide a
+       footnote summarizing the contact formulation of the Hertz-Mindlin
+       springs, with associated references from which the general solution is
+       obtained for sphere-sphere and sphere-plane contacts between two
+       elastic bodies with different radii and elastic constants. Describe the
+       Hertzian component of the surface-interaction force model as providing
+       "...the nonlinear force-displacement response arising from mutual
+       compression of two elastic bodies, which induces a local deformation of
+       the bodies in the vicinity of the contact surface. The local
+       deformation is determined by the shapes and elastic constants of the
+       bodies in the vicinity of the contact surface."
+       REFERENCE:
+         Potyondy, D. (2016) "Hill Contact Model [version 4]," Itasca
+         Consulting Group, Inc., Minneapolis, MN, Technical Memorandum
+         ICG7795-L (May 13, 2016).
+    C. Update PFC 5.0 from 5.00.23 to 5.00.24.
+    D. Remove the MakeThenTest drivers for the myMatGen projects, and replace
+       with following scheme. Provide run projects [MatGen&Test-RUN] for each
+       material to create that material and perform appropriate laboratory
+       tests upon it. Provide master run project [MatGen&Test_AllMats-RUN] to
+       create and perform appropriate tests on all materials. Modify all
+       projects to exit upon completion.
+    E. Provide plot-generation data files for material genesis, and each
+       laboratory test: X-MakePlots.{p2,p3}dat, where X = {MatGen, CompTest,
+       DiamCompTest, TenTest}.
+
+21 | 5.00.23 | 04/18/16
+  Enhancements.
+    A. Modify @mvListProps to list current and initial vessel dimensions. Fix
+       the figures of the linear and hill example materials to show vessel
+       dimensions at the end of material genesis, which are less than the
+       initial vessel dimensions because the boundary-contraction packing
+       procedure moves the vessel walls inward. The previous figures showed
+       the initial vessel dimensions.
+    B. Clarify specification of measurement regions within the material vessel
+       --- see new material-vessel parameters mv_inset{D,L}Fac, and note the
+       renaming of _mvMpFac{W,H} ==> mv_inset{D,L}Fac.
+    C. Microstructural plotting is now off by default, it had been on by
+       default. Microstructural plotting is turned on by @msOn. It can also be
+       turned on at the end of material genesis by specifying [true] as the
+       value of the new second parameter of mpMake in the material-genesis
+       driver file. For large models, with more than 15000 grains, the
+       microstructural plots require significant memory with a corresponding
+       increase in save-file size. For large models, it is better to keep
+       microstructural plotting off, and only activate it by calling @msOn
+       when generating a microstructural plot.
+    D. Reset grain displacements to zero after the seating phase of the
+       tension and compression tests.
+    E. Add MakeThenTest drivers to myMatGen projects.
+
+20 | 5.00.23 | 02/26/16
+  Enhancements.
+    A. Enhance support for computation of grain size distribution via
+       @gsdGetSizeOfPercentile(pct), which returns grain size corresponding to
+       percentile {pct} for grain size distribution in GSD table created by
+       @gsdMeasure.
+    B. Improve microstructural monitoring (see Section 3.0 in fistPkg memo).
+    C. Add description of resilent modulus computation as a means to quantify
+       the deformability of a granular material (see Section 5.2 in fistPkg
+       memo).
+    D. Add the hill contact model to the fistPkg as a user-defined contact
+       model. The hill contact model is described in Potyondy (2016a). The
+       creation and triaxial testing of a hill material are described in
+       Potyondy (2016b, User-Defined Material Example). A material-behavior
+       study that compares the responses of the linear and hill materials for
+       narrow and broad grain-size distributions is given in Section 2.3 of
+       Potyondy (2016a). The following modifications were made to the
+       user-defined material interface, and to the hill contact model:
+         o Provide new file udm_hl.p3fis for udm redefinitions, and replace
+           udm_setMatBehavior with hlm_setMatBehavior.
+         o Rename hill model property suc_coef => suction.
+           Rename hill model parameters:
+             hlm_sucCoef    => hlm_suction
+             hl_makeDry     => hlm_makeDry
+             hl_makeWet(gm) => hlm_makeWet(psi, gm)
+       REFERENCES:
+         Potyondy, D. (2016a) "Hill Contact Model [version 4]," Itasca
+         Consulting Group, Inc., Minneapolis, MN, Technical Memorandum
+         ICG7795-L (February 26, 2016).
+         //
+         Potyondy, D. (2016b) "Material Modeling Support in PFC [fistPkg20],"
+         Itasca Consulting Group, Inc., Minneapolis, MN, Technical Memorandum
+         ICG7766-L (February 26, 2016).
+
+19 | 5.00.22 | 01/12/16
+  Create microstructural plot sets --- see Section 3.2 {Microstructural Plot
+  Sets}. Hide many of the views, they are manipulated via the Documents
+  button. Modify default values of _mvMpFacH and _mvMpFacW from 0.9 to 0.8;
+  these values control the size of the measurement spheres used to measure
+  stress and strain in the material.
+
+18 | 5.00.22 | 12/10/15
+  Enhancements.
+    A. Modify compression test for bonded materials to provide two additional
+       hidden views (pl-mer_wea, pl-mev_wea) to be used during UCS tests. The
+       wall-based radial and volumetric strains are not measured during UCS
+       tests, and thus, the corresponding measurement-based quantities must be
+       used to plot radial and volumetric strain versus axial strain curves.
+    B. Enhance microstructural monitoring to include: microstructural
+       properties (overlap ratios [mp_ORs] and bond coordination number
+       [mp_CNb]); crack filtering and gaps; and microstructural plots --- see
+       Section 3.0 {MICROSTRUCTURAL MONITORING}.
+
+ 17 5.00.21  09/22/15
+             Enhancements.
+             (a) Enhance compression test to include uniaxial-strain test (by
+                 setting ct_testType = 2).
+             (b) Delete grains with centers lying outside of the material
+                 vessel at the end of step 2 of the packing phase.
+             (c) Compute grain size distribution (GSD) of synthetic material
+                 by calling sdMeasure(numBins) to create table GSD, which is
+                 displayed in view pl-GSD (see Section 2.9 {Microstructural
+                 Properties} of the material modeling support memo).
+
+ 16 5.00.20  07/22/15
+             Minor enhancements.
+               * Force chains can now be displayed as either bi-colored to
+                 denote tension and compression or scale-colored to denote
+                 magnitude (see plot items: "Contact force chain" and "Contact
+                 force_mag"). This capability is described as follows. The
+                 macroscopically applied compressive load is carried by the
+                 granular material as force chains that propagate from one
+                 grain to the next across grain-grain contacts. The
+                 force-chain fabric is depicted as a network of cylinders,
+                 with a cylinder at each contact. Force magnitude corresponds
+                 with cylinder color and thickness, and force direction
+                 corresponds with cylinder orientation.
+               * Add {Section 5.4 Loading Rate} to memo {Material Modeling
+                 Support in PFC}.
+               * Improve setup phase of UCS test to move platens away from
+                 specimen at ten times the previous rate.
+               * Add geometry set "viewBox" to material-genesis to allow one
+                 to display a box of a specified size on each plot (via the
+                 Geometry plot item).
+
+ 15 5.00.17  04/22/15
+             Add capability to create a user-defined material, with a
+             user-defined material example that creates a 3D hill material.
+
+ 14 5.00.15  02/17/15
+             Add diametral-compression test for PFC2D, with usage example for
+             the 2D parallel-bonded material.
+
+ 13 5.00.15  02/05/15
+             Remove the packing parameters: pk_emod and pk_krat. These two
+             properties are replaced by the properties of either the linear
+             material group (lnm_emod and lnm_krat) or the user-defined
+             contact model (as specified in the udm_setMatBehavior FISH
+             function).
+
+ 12 5.00.15  02/02/15
+             Two enhancements: (1) Add a spherical material vessel. (2) Add
+             diametral-compression test for PFC3D, with usage example for the
+             parallel-bonded material. Break the material-modeling support
+             memo into three related memos named "Material-Modeling Support in
+             PFC," and "Material-Modeling Support in PFC (Example Materials
+             {1,2}."
+
+ 11 5.00.15  01/27/15
+             Two modifications: (1) Fix bug in computation of servomechanism
+             gain in axial direction for 3D cylindrical vessel, and improve
+             computation of wall-based stresses (now controlled by
+             mv_wAreaMode). (2) Add Potyondy (2014) to documentation directory
+             (see reference in entry for fistPkg 10).
+
+ 10 5.00.15  01/20/15
+             Modify "Material-Modeling Support in PFC" memo to correspond with
+             updated PFC 5.00.15 documentation set, and to refer to Potyondy
+             (2015). Enhance compression test to support fully unconfined
+             tests. [REFERENCE: Potyondy, D.O. (2015) "The Bonded-Particle
+             Model as a Tool for Rock Mechanics Research and Application:
+             Current Trends and Future Directions," Geosystem Engineering,
+             18(1), 1-28.]
+
+ 09 5.00.14  11/17/14
+             PFC 5.0 FISHTank released to users as fistPkg09.
+
+ 08 5.00.14  10/20/14
+             Update the PowerPoint slide set that summarizes Potyondy (2014a).
+             REFERENCE: {Potyondy, D. (2014a) "Material-Modeling Support in
+             PFC," Itasca Consulting Group, Inc., Minneapolis, MN, Technical
+             Memorandum ICG7766-L, October 20, 2014.}
+
+ 07 5.00.14  10/10/14
+             Initial release of the PFC 5.0 Fishtank, which provides the
+             following capabilities (for both PFC2D and PFC3D): material
+             genesis of linear, contact-bonded, parallel-bonded and
+             flat-jointed materials (all grains are balls) in physical
+             material vessels (cylindrical and polyaxial) with compression and
+             direct-tension testing.
+
+ 06 5.00.14  09/19/14
+             Minor enhancements since fistPkg05. fistPkg06 has been released
+             for selective internal Itasca review.
+
+ 05 5.00.14  09/04/14
+             Material genesis of linear, contact-bonded, parallel-bonded and
+             flat-jointed materials in physical material vessel with
+             compression and direct-tension testing (PFC3D only, all grains
+             are balls). Not yet available: (1) extend to support PFC2D, (2)
+             allow grains to be clumps, (3) provide Brazilian-tension and
+             fracture-toughness tests, (4) provide smooth-jointed interface
+             and (5) provide stress-installation procedure.
+
+04a 5.00.9   07/25/14
+             THIS IS A PRIVATE VERSION of ongoing developments, created for
+             use of Derrick Blanksma. It supports creation of a linear
+             material, and compression testing of that material. Note that it
+             has been tested with PFC 5.00.9, it should probably work with
+             more recent versions of PFC as well.
+
+ 03 5.00.9   06/25/14
+             Modified interface to compression-test procedure to make it
+             correspond with description in the memo: "Material-Modeling
+             Support in PFC."
+
+ 02 5.00.9   06/22/14
+             Material genesis and compression testing can be performed on the
+             linear material for which all grains are balls.
+
+ 01 5.00.7   06/10/14
+             Establish initial tank to support creation of linear material and
+             compression testing (PFC3D only).
+
+;EOF: fistPkg-publicMods.txt

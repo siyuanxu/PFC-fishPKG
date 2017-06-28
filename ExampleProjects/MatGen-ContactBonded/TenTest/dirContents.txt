@@ -1,0 +1,16 @@
+;fname: dirContents.txt [fistPkgN\ExampleProjects\
+;                        MatGen-X\TenTest]
+;
+  direct-Tension Test project
+    PFC3D:
+      TenTest-MakePlots.p3dat
+      TenTest.p3prj
+      TenTest.p3dvr
+      ttParams.p3dat
+    PFC2D:
+      TenTest-MakePlots.p2dat
+      TenTest.p2prj
+      TenTest.p2dvr
+      ttParams.p2dat
+;
+;EOF: dirContents.txt

@@ -1,0 +1,14 @@
+;fname: DiamCompTest-MakePlots.p3dat
+;
+; Generate diametral-compression test plots, one PNG file for each view.
+; Open the diametral-compression test project (DiamCompTest.p3prj), and call this
+; plot-generation file via {File: Open into Project: DiamCompTest-MakePlots.p3dat}.
+
+; ####################################
+  plot bitmap view pl-DCspec  size 4000 2400 filename 'pl-DCspec.png'
+  plot bitmap view pl-ck_wea  size 4000 2400 filename 'pl-ck_wea.png'
+  plot bitmap view pl-wfa_wda size 4000 2400 filename 'pl-wfa_wda.png'
+  plot bitmap view pl-wfa_wea size 4000 2400 filename 'pl-wfa_wea.png'
+; ####################################
+return
+;EOF: DiamCompTest-MakePlots.p3dat

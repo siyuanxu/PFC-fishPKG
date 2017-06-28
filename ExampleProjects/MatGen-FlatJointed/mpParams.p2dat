@@ -1,0 +1,72 @@
+;fname: mpParams.p2dat
+;
+; Specify the material properties:
+;   common, packing and material groups.
+;
+;#####################################################
+def mpSetCommonParams
+; Set common parameters.
+  cm_matName = 'SS_FlatJointed2D'
+  ; ** Typical sandstone (2D flat-jointed material).
+  cm_matType = 3
+  cm_localDampFac = 0.7
+  cm_densityCode = 1
+  cm_densityVal = 1960.0
+
+  ; Grain shape & size distribution group:
+    cm_nSD = 1
+    cm_typeSD = array.create(cm_nSD)
+    cm_ctName = array.create(cm_nSD)
+    cm_Dlo    = array.create(cm_nSD)
+    cm_Dup    = array.create(cm_nSD)
+    cm_Vfrac  = array.create(cm_nSD)
+    cm_Dlo(  1) = 1.6e-3
+    cm_Dup(  1) = 2.4e-3
+    cm_Vfrac(1) = 1.0
+end
+@mpSetCommonParams
+
+def mpSetPackingParams
+; Set packing parameters (grain scaling).
+  pk_Pm = 30e6
+  pk_procCode = 1
+  pk_nc = 0.08
+end
+@mpSetPackingParams
+
+;#####################################################
+def mpSetFJParams
+; Set flat-jointed material parameters.
+  ; Common group (set in mpSetCommonParams)
+  ; Packing group (set in mpSetPackingParams)
+  ; Flat-jointed material group:
+    fjm_trackMS = false
+    fjm_igap = 0.0
+    fjm_B_frac = 1.0
+    fjm_G_frac = 0.0
+    fjm_G_m  = 0.0
+    fjm_G_sd = 0.0
+    fjm_Nr  = 2
+    fjm_rmulCode = 0
+    fjm_rmulVal = 1.0
+    fjm_emod = 3.0e9
+    fjm_krat = 1.5
+    fjm_fric = 0.4
+    fjm_ten_m  = 1.0e6
+    fjm_ten_sd = 0.0
+    fjm_coh_m  = 20.0e6
+    fjm_coh_sd = 0.0
+    fjm_fa = 0.0
+
+  ; Linear material group:
+    lnm_emod = 1.5e9
+    lnm_krat = 1.5
+    lnm_fric = 0.4
+end
+@mpSetFJParams
+
+@_mpCheckAllParams
+@mpListMicroProps
+
+return
+;EOF: mpParams.p2dat

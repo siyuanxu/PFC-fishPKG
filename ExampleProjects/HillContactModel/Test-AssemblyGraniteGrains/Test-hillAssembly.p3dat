@@ -1,0 +1,28 @@
+;fname: Test-hillAssembly.p3dat
+load contactmodelmechanical hill
+
+new
+title 'Test-hillAssembly'
+
+domain extent -10 10
+cmat default type ball-ball ...
+             model hill ...
+             property fric_coef 0.4 suction 200e3 damp_con 0.07
+cmat default type ball-facet ...
+             model linear ...
+             method deformability emod 29.0e6 kratio 1.0 ...
+             property fric 0.4
+ball generate cubic box -10e-3 10e-3 radius 5.0e-3
+wall generate box -17e-3 17e-3 -17e-3 17e-3 -17e-3 17e-3
+
+ball attribute density 2650.0 damp 0.7
+ball property young_mod 29.0e9 pois_ratio 0.15
+clean
+
+set gravity 0.0 0.0 -9.81  ; acts in negative z-direc.
+pause
+solve arat 1e-5
+wall list attribute contactforce
+
+return
+;EOF: Test-hillAssembly.p3dat

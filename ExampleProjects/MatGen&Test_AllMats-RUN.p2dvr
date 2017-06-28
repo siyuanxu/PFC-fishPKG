@@ -1,0 +1,17 @@
+;fname: MatGen&Test_AllMats-RUN.p2dvr
+set logfile MatGen&Test_AllMats-RUN.p2log
+set log on truncate
+
+new
+system clone timeout -1 MatGen-Linear\MatGen&Test-RUN.p2prj ...
+       call MatGen&Test-RUN.p2dvr
+system clone timeout -1 MatGen-ContactBonded\MatGen&Test-RUN.p2prj ...
+       call MatGen&Test-RUN.p2dvr
+system clone timeout -1 MatGen-ParallelBonded\MatGen&Test-RUN.p2prj ...
+       call MatGen&Test-RUN.p2dvr
+system clone timeout -1 MatGen-FlatJointed\MatGen&Test-RUN.p2prj ...
+       call MatGen&Test-RUN.p2dvr
+
+set log off
+return
+;EOF: MatGen&Test_AllMats-RUN.p2dvr

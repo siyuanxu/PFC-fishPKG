@@ -1,0 +1,16 @@
+;fname: dirContents.txt [fistPkgN\ExampleProjects\
+;                        MatGen-X\DiamCompTest]
+;
+  Diametral-Compression test project
+    PFC3D:
+      DiamCompTest-MakePlots.p3dat
+      DiamCompTest.p3prj
+      DiamCompTest.p3dvr
+      dcParams.p3dat
+    PFC2D:
+      DiamCompTest-MakePlots.p2dat
+      DiamCompTest.p2prj
+      DiamCompTest.p2dvr
+      dcParams.p2dat
+;
+;EOF: dirContents.txt

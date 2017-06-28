@@ -1,0 +1,66 @@
+;fname: mpParams.p3dat
+;
+; Specify the material properties:
+;   common, packing and material groups.
+;
+;#####################################################
+def mpSetCommonParams
+; Set common parameters.
+  cm_matName = 'SS_ContactBonded'
+  ; ** Typical sandstone (contact-bonded material).
+  cm_matType = 1
+  cm_localDampFac = 0.7
+  cm_densityCode = 1
+  cm_densityVal = 1960.0
+
+  ; Grain shape & size distribution group:
+    cm_nSD = 1
+    cm_typeSD = array.create(cm_nSD)
+    cm_ctName = array.create(cm_nSD)
+    cm_Dlo    = array.create(cm_nSD)
+    cm_Dup    = array.create(cm_nSD)
+    cm_Vfrac  = array.create(cm_nSD)
+    cm_Dlo(  1) = 4.0e-3
+    cm_Dup(  1) = 6.0e-3
+    cm_Vfrac(1) = 1.0
+end
+@mpSetCommonParams
+
+def mpSetPackingParams
+; Set packing parameters (grain scaling).
+  pk_Pm = 30e6
+  pk_procCode = 1
+  pk_nc = 0.30
+end
+@mpSetPackingParams
+
+;#####################################################
+def mpSetCBParams
+; Set contact-bonded material parameters.
+  ; Common group (set in mpSetCommonParams)
+  ; Packing group (set in mpSetPackingParams)
+  ; Contact-bonded material group:
+    ; Linear group:
+      cbm_emod = 3.0e9
+      cbm_krat = 1.5
+      cbm_fric = 0.4
+
+    ; Contact-bond group:
+      cbm_igap = 0.0
+      cbm_tens_m  = 1.0e6
+      cbm_tens_sd = 0.0
+      cbm_shears_m  = 20.0e6
+      cbm_shears_sd = 0.0
+
+  ; Linear material group:
+    lnm_emod = 3.0e9
+    lnm_krat = 1.5
+    lnm_fric = 0.4
+end
+@mpSetCBParams
+
+@_mpCheckAllParams
+@mpListMicroProps
+
+return
+;EOF: mpParams.p3dat

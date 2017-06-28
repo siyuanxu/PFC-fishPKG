@@ -1,0 +1,19 @@
+;fname: mvParams.p2dat
+
+def mvSetParams
+; Set Material-Vessel Parameters.
+; ** Rectangular-cuboid material vessel (of 240-mm height, 170-mm width and unit depth,
+;    with a 500 MPa effective modulus).
+  mv_type  = 0
+  mv_H = 240e-3
+  mv_W = 170e-3
+  mv_emod = 500e6
+end
+@mvSetParams
+@_mvCheckParams
+@mvListProps
+
+@msBoxDefine( [vector(0.0, 0.0, 0.0)], [vector(50e-3, 50e-3, 50e-3)] )
+
+return
+;EOF: mvParams.p2dat

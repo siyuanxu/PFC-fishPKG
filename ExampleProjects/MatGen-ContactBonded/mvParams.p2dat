@@ -1,0 +1,19 @@
+;fname: mvParams.p2dat
+
+def mvSetParams
+; Set Material-Vessel Parameters.
+; ** Square-cuboid material vessel (of 50 mm side length and unit depth,
+;    with a 3 GPa effective modulus).
+  mv_type  = 0
+  mv_H = 50.0e-3
+  mv_W = 50.0e-3
+  mv_emod = 3.0e9
+end
+@mvSetParams
+@_mvCheckParams
+@mvListProps
+
+@msBoxDefine( [vector(0.0, 0.0)], [vector(10e-3, 10e-3)] ) ; centered square (10 mm side)
+
+return
+;EOF: mvParams.p2dat

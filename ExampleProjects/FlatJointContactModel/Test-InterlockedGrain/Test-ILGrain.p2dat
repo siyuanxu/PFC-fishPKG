@@ -1,0 +1,50 @@
+;fname: Test-ILGrain.p2dat
+
+new
+title 'Test Interlocked Grain'
+
+call ..\..\fistSrc\ft.fis suppress
+call ..\..\fistSrc\ck.fis suppress
+
+domain extent -50e-3 50e-3
+cmat default model flatjoint
+
+ball create radius 6.25e-3 position (  0.0,     0.0,  ) group middle
+ball create radius 6.25e-3 position (  0.0,    12.5e-3) group top
+ball create radius 6.25e-3 position (  0.0,   -12.5e-3) group bottom
+ball create radius 6.25e-3 position (-12.5e-3,  0.0   ) group left
+ball create radius 6.25e-3 position ( 12.5e-3,  0.0   ) group right
+ball attribute density 2650.0 damp 0.7
+clean
+contact property fj_Nr 4 ...
+                 fj_rmul 0.8 fj_gap0 0 fj_fric 0 ...
+                 fj_ten 0 fj_coh 0 fj_fa 0 ...
+                 fj_kn 2.3200e12 fj_ks 1.0087e12
+ball fix spin velocity  ; for all grains
+
+set energy on
+set orientation on
+set timestep fix 1.0e-6
+
+set @msFJi_sfacRad = 1.0
+@ckInit
+@msFG_Track
+@msOn
+title 'Test Interlocked Grain (initial state, outer grains fixed)'
+pause
+
+title 'Test Interlocked Grain (rotate the middle grain)'
+ball attribute spin -10.0 range group middle ;
+ball attribute spin  10.0 range group middle ;
+cycle 20000                                  ; theta_z = 0.2 rad
+ball attribute spin   0.0 range group middle ;
+ball attribute spin   0.0 range group middle ;
+cycle 5000 ; insure at full static equilibrium
+pause
+
+title 'Test Interlocked Grain (remove rotational restraint on outer grains)'
+ball free spin range group middle not
+cycle 5000 ; insure at full static equilibrium
+
+return
+;EOF: Test-ILGrain.p2dat

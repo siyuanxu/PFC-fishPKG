@@ -1,0 +1,52 @@
+;fname: MatGen-Class5.p3dvr
+;
+;  IN:  mvParams.p3dat
+;       mpParams-[ C5{n,b}_{Linear,Hill} ].p3dat
+;  OUT: MatGen-Class5.p3log
+;       Saved States (with corresponding model titles):
+;         [ C5{n,b}_{Linear,Hill} ]-matV : specimen in material vessel
+;
+;=============================================================================
+set logfile MatGen-Class5.p3log
+set log     on truncate
+set echo    on
+
+;#######################################################
+new
+call ..\..\fistSrc\ft.fis       suppress
+call mvParams.p3dat             suppress
+call mpParams-C5n_Linear.p3dat  suppress
+@mvMake
+@mpMake(0, [false])
+;#######################################################
+new
+call ..\..\fistSrc\ft.fis       suppress
+call mvParams.p3dat             suppress
+call mpParams-C5b_Linear.p3dat  suppress
+@mvMake
+@mpMake(0, [false])
+;#######################################################
+new
+call ..\..\fistSrc\ft.fis       suppress
+call ..\..\fistSrc\hl.p3fis     suppress
+call ..\..\fistSrc\udm_hl.p3fis suppress
+call mvParams.p3dat             suppress
+call mpParams-C5n_Hill.p3dat    suppress
+@mvMake
+@mpMake(0, [false])
+;#######################################################
+new
+call ..\..\fistSrc\ft.fis       suppress
+call ..\..\fistSrc\hl.p3fis     suppress
+call ..\..\fistSrc\udm_hl.p3fis suppress
+call mvParams.p3dat             suppress
+call mpParams-C5b_Hill.p3dat    suppress
+@mvMake
+@mpMake(0, [false])
+;#######################################################
+
+set log off
+gui project save
+exit
+return
+;EOF: MatGen-Class5.p3dvr

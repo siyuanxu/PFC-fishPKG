@@ -1,0 +1,18 @@
+;fname: CompTest-MakePlots.p3dat
+;
+; Generate compression test plots, one PNG file for each view.
+; Open the compression test project (CompTest.p3prj), and call this
+; plot-generation file via {File: Open into Project: CompTest-MakePlots.p3dat}.
+
+; ####################################
+  plot bitmap view pl-CTcell  size 4000 2400 filename 'pl-CTcell.png'
+  plot bitmap view pl-ck_wea  size 4000 2400 filename 'pl-ck_wea.png'
+  plot bitmap view pl-wsd_wea size 4000 2400 filename 'pl-wsd_wea.png'
+  plot bitmap view pl-wer_wea size 4000 2400 filename 'pl-wer_wea.png'
+  plot bitmap view pl-mer_wea size 4000 2400 filename 'pl-mer_wea.png'
+  plot bitmap view pl-wev_wea size 4000 2400 filename 'pl-wev_wea.png'
+  plot bitmap view pl-mev_wea size 4000 2400 filename 'pl-mev_wea.png'
+  plot bitmap view pl-mn_wea  size 4000 2400 filename 'pl-mn_wea.png'
+; ####################################
+return
+;EOF: CompTest-MakePlots.p3dat

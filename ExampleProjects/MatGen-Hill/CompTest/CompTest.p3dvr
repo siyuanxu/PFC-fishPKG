@@ -1,0 +1,48 @@
+;fname: CompTest.p3dvr
+;
+;  IN:  ctParams.p3dat
+;       Saved State (with corresponding model title):
+;         <cm_matName>-matV : specimen in material vessel
+;  OUT: CompTest.p3log
+;       Saved States (with corresponding model titles):
+;         <cm_matName>-ctN : end of loading stage N (N = 0,1,2,...)
+;                            (loading stage 0 is seating phase)
+;
+;=============================================================================
+set logfile CompTest.p3log
+set log     on truncate
+set echo    on
+
+;#######################################################
+; ** Test the dry material.
+restore ..\AG_Hill-matV.p3sav
+
+call ..\..\fistSrc\ct.fis suppress
+call ctParams.p3dat       suppress
+
+@msOff
+@ctSeatingPhase
+@ft_ZeroGrainDisplacement
+@ctLoadingPhase
+;#######################################################
+; ** Test the wet material.
+restore ..\AG_Hill-matV.p3sav
+
+call ..\..\fistSrc\ct.fis suppress
+call ctParams.p3dat       suppress
+
+; ** Add 20 kPa suction btn. grains within 3.0 mm of one another.
+[cm_matName = cm_matName + '_suc20kPa']
+@hlm_makeWet( 20.0e3, 3.0e-3 )
+
+@msOff
+@ctSeatingPhase
+@ft_ZeroGrainDisplacement
+@ctLoadingPhase
+;#######################################################
+
+set log off
+gui project save
+exit
+return
+;EOF: CompTest.p3dvr

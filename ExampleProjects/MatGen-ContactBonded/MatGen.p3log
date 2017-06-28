@@ -1,0 +1,432 @@
+**********************************************
+* Logging started at 周一 4月 10 17:03:33 2017
+* By pfc3d Version 5.00 Release 030
+* 
+* 
+* Job Title: SS_ContactBonded material removed from material vessel.
+**********************************************
+pfc3d>set echo    on
+pfc3d> 
+pfc3d>;#######################################################
+pfc3d>new
+pfc3d>load fish "plugins/fish/fishuser_function005_64.dll"
+--- fish plugin user_function already loaded.
+pfc3d>set deterministic on
+pfc3d>set precision 6
+pfc3d>call ..\fistSrc\ft.fis suppress
+pfc3d>call mvParams.p3dat    suppress
+## Material-Vessel Properties:
+     mv_type: 0 (physical)
+     mv_shape: 0 (rectangular cuboid)
+     {mv_H, _wdz} (height {initial, current}, aligned with z-axis): {0.05,0}
+     {mv_W, _wdy} ( width {initial, current}, aligned with y-axis): {0.05,0}
+     {mv_D, _wdx} ( depth {initial, current}, aligned with x-axis): {0.05,0}
+     mv_expandFac: 1.2
+     mv_emod (effective modulus): 3e+09
+     mv_insetLFac (measurement region spanning-length factor): 0.8
+     mv_insetDFac (measurement region diameter factor): 0.8
+pfc3d>call mpParams.p3dat    suppress
+## Material Microproperties:
+   Common group:
+     cm_matName (material name): SS_ContactBonded
+     cm_matType (material-type code): 1 (contact-bonded)
+     cm_localDampFac (local-damping factor): 0.7
+     cm_densityCode: 1 (cm_densityVal is bulk density)
+     cm_densityVal: 1960
+     Grain shape & size distribution group:
+       cm_shape (grain-shape code): 0 (all balls)
+       cm_nSD (number of size distributions): 1
+         cm_typeSD(1): 0 (uniform)
+         cm_Dlo(1): 0.004
+         cm_Dup(1): 0.006
+         cm_Vfrac(1): 1
+       cm_Dmult (diameter multiplier): 1
+   Packing group:
+     pk_seed (seed of random-number generator): 10000
+     pk_Pm (material pressure): 3e+07
+     pk_PTol (pressure tolerance): 0.01
+     pk_ARatLimit (equilibrium-ratio limit): 0.008
+     pk_stepLimit (step limit): 2000000
+     pk_procCode (packing-procedure code): 1 (grain scaling)
+     pk_nc (grain-cloud porosity): 0.3
+     _pkORmaxLimit (overlap-ratio maximum limit): 0.25
+     _pkORupdateRate (overlap-ratio update rate, number of cycles): 100
+   Contact-bonded material group:
+     Linear group:
+       cbm_emod (effective modulus): 3e+09
+       cbm_krat (stiffness ratio): 1.5
+       cbm_fric (friction coefficient): 0.4
+     Contact-bond group:
+       cbm_igap (installation gap): 0
+       cbm_tens_m    (tensile-strength distribution [stress], mean): 1e+06
+       cbm_tens_sd   (tensile-strength distribution [stress], standard deviation): 0
+       cbm_shears_m  (shear-strength   distribution [stress], mean): 2e+07
+       cbm_shears_sd (shear-strength   distribution [stress], standard deviation): 0
+   Linear material group:
+     lnm_emod (effective modulus): 3e+09
+     lnm_krat (stiffness ratio): 1.5
+     lnm_fric (friction coefficient): 0.4
+pfc3d> 
+pfc3d>@mvMake
+pfc3d>title [titStr]
+## mvMake, Make the material vessel (entering).
+pfc3d>domain extent [-1.0*mv_D] [1.0*mv_D]                     [-1.0*mv_W] [1.0*mv_W]                     [-1.0*mv_H] [1.0*mv_H]              condition stop stop stop
+pfc3d>contact method deformability emod [emod] krat [krat]             range contact type [myTypeStr(tidx)]
+pfc3d>contact property fric [fric] inheritance off                          rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0 range contact type [myTypeStr(tidx)]
+pfc3d>contact method deformability emod [emod] krat [krat]             range contact type [myTypeStr(tidx)]
+pfc3d>contact property fric [fric] inheritance off                          rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0 range contact type [myTypeStr(tidx)]
+pfc3d>cmat default type [myTypeStr(tidx)]                      model [cmName]                      method deformability emod [emod] krat [krat]                      property fric [fric] inheritance off rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0                      proximity [prox]
+pfc3d>cmat default type [myTypeStr(tidx)]                      model [cmName]                      method deformability emod [emod] krat [krat]                      property fric [fric] inheritance off rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0                      proximity [prox]
+pfc3d>clean
+pfc3d>wall generate id 1 name mv box [-0.5*mv_D*mv_expandFac] [0.5*mv_D*mv_expandFac]                                        [-0.5*mv_W*mv_expandFac] [0.5*mv_W*mv_expandFac]                                        [-0.5*mv_H*mv_expandFac] [0.5*mv_H*mv_expandFac]
+--- The wall mvBottom with id 1 and 2 facets has been created
+--- The wall mvTop with id 2 and 2 facets has been created
+--- The wall mvLeft with id 3 and 2 facets has been created
+--- The wall mvRight with id 4 and 2 facets has been created
+--- The wall mvFront with id 5 and 2 facets has been created
+--- The wall mvBack with id 6 and 2 facets has been created
+pfc3d>measure create id 1 radius @_mRad position @_mPos
+--- Measure 1 with radius 0.02 created at position (0,0,0).
+pfc3d>measure create id 2 radius @_mRad position @_mPos
+--- Measure 2 with radius 0.02 created at position (0,0,0).
+pfc3d>measure create id 3 radius @_mRad position @_mPos
+--- Measure 3 with radius 0.02 created at position (0,0,0).
+pfc3d>set fish callback 42.1  mv_mStress
+pfc3d>set fish callback 10.10 mv_mStrain
+pfc3d>set fish callback 10.10 mv_mPoros
+pfc3d>set fish callback 42.1  mv_wStress
+pfc3d>set fish callback 10.10 mv_wStrain
+pfc3d>set fish callback 10.10 mv_wPoros
+pfc3d>history nstep 20
+pfc3d>history id=1 fish mv_msm
+--- Created history 1 mv_msm (FISH)
+pfc3d>history id=2 fish mv_wsm
+--- Created history 2 mv_wsm (FISH)
+pfc3d>history id=3 fish mv_mn
+--- Created history 3 mv_mn (FISH)
+pfc3d>history id=4 fish mv_wn
+--- Created history 4 mv_wn (FISH)
+## mvMake (exiting).
+pfc3d>@mpMake( 0, [false] )
+pfc3d>title [titStr]
+## mpMake, Making the material and continuing (entering).
+pfc3d>set random [seed]
+pfc3d>ball distribute ...
+pfc3d>  box [-0.5*mv_D] [0.5*mv_D] ...
+pfc3d>      [-0.5*mv_W] [0.5*mv_W] ...
+pfc3d>      [-0.5*mv_H] [0.5*mv_H] ...
+pfc3d>  porosity [nc] ...
+pfc3d>  resolution [cm_Dmult] ...
+pfc3d>  numbin [cm_nSD] ...
+pfc3d>  bin 1 group [mpGrp(1)] ...
+pfc3d>        radius [0.5*cm_Dlo(1)] [0.5*cm_Dup(1)] ...
+pfc3d>        ... 
+pfc3d>        volumefraction [cm_Vfrac(1)]
+--- 1276 balls generated - There may be huge overlaps!
+pfc3d>ball attribute damp [dFac]
+--- Attribute damp initialized in 1276 ball(s).
+## _mpPackIsoState (entering).
+pfc3d>contact method deformability emod [emod] krat [krat]             range contact type [myTypeStr(tidx)]
+pfc3d>contact property fric [fric] inheritance off                          rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0 range contact type [myTypeStr(tidx)]
+pfc3d>contact method deformability emod [emod] krat [krat]             range contact type [myTypeStr(tidx)]
+pfc3d>contact property fric [fric] inheritance off                          rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0 range contact type [myTypeStr(tidx)]
+pfc3d>contact method deformability emod [emod] krat [krat]             range contact type [myTypeStr(tidx)]
+pfc3d>contact property fric [fric] inheritance off                          rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0 range contact type [myTypeStr(tidx)]
+pfc3d>cmat default type [myTypeStr(tidx)]                      model [cmName]                      method deformability emod [emod] krat [krat]                      property fric [fric] inheritance off rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0                      proximity [prox]
+pfc3d>cmat default type [myTypeStr(tidx)]                      model [cmName]                      method deformability emod [emod] krat [krat]                      property fric [fric] inheritance off rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0                      proximity [prox]
+pfc3d>cmat default type [myTypeStr(tidx)]                      model [cmName]                      method deformability emod [emod] krat [krat]                      property fric [fric] inheritance off rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0                      proximity [prox]
+pfc3d>clean
+   Perform calming (via cycle calm 5) until max overlap-ratio is less than or equal to 0.25
+pfc3d>solve fishhalt _mpMaxORisSmall calm 5
+     max overlap-ratio: 1.02628
+     max overlap-ratio: 0.407026
+     max overlap-ratio: 0.334018
+     max overlap-ratio: 0.304107
+     max overlap-ratio: 0.288366
+     max overlap-ratio: 0.263099
+     max overlap-ratio: 0.227507
+--- Global FishHalt function _mpMaxORisSmall.
+    Cycle      Total    Timestep       Clock
+--------- ---------- ----------- ----------- 
+      600        600 8.79673E-07 00:00:00:04                                              
+--- FISH function _mpMaxORisSmall returned 1.
+--- Cycling ended at: 2017-04-10 17:03:37
+   **Calming done, max overlap-ratio: 0.227507
+pfc3d>ball delete range x [-0.5*mv_D] [0.5*mv_D] not
+--- 0 balls deleted.
+pfc3d>ball delete range y [-0.5*mv_W] [0.5*mv_W] not
+--- 0 balls deleted.
+pfc3d>ball delete range z [-0.5*mv_H] [0.5*mv_H] not
+--- 0 balls deleted.
+   Cycle until mean stress is near zero or static equilibrium is obtained.
+pfc3d>solve fishhalt _mpMSisNearZero aratio [pk_ARatLimit] max_cycles [pk_stepLimit]
+--- Global FishHalt function _mpMSisNearZero.
+    Cycle      Total    Timestep Mech Aratio       Clock
+--------- ---------- ----------- ----------- ----------- 
+      505       1105 8.43829E-07  7.9958e-03 00:00:00:03   2000000                         8.0000e-03             
+--- Limit aratio of 8.0000e-03 met in process(es): mech Ball (7.9958e-03),mech Clump (0.0000e+00).
+--- Cycling ended at: 2017-04-10 17:03:41
+pfc3d>ball delete range x [-0.5*mv_D] [0.5*mv_D] not
+--- 0 balls deleted.
+pfc3d>ball delete range y [-0.5*mv_W] [0.5*mv_W] not
+--- 0 balls deleted.
+pfc3d>ball delete range z [-0.5*mv_H] [0.5*mv_H] not
+--- 0 balls deleted.
+   **Static equilibrium obtained within desired tolerance.
+## _mpPackIsoState (exiting).
+## _mpPackGrainScale (entering).
+   Target  material pressure: 3e+07
+   Current material pressure: 1.21952e+08
+   Target  pressure tolerance: 0.01
+   Current pressure tolerance: 3.06505
+     Iteration: 1
+     Scaling grains by factor: 0.974549
+           Accumulated factor: 0.974549
+   Cycle until mean stress is near zero or static equilibrium is obtained.
+pfc3d>cycle 10
+    Cycle      Total    Timestep       Clock
+--------- ---------- ----------- ----------- 
+       10       1115 8.32024E-07 00:00:00:00        10                                    
+--- Global cycle limit of 10 met.
+--- Cycling ended at: 2017-04-10 17:03:41
+pfc3d>solve fishhalt _mpMSisNearZero aratio [pk_ARatLimit] max_cycles [pk_stepLimit]
+--- Global FishHalt function _mpMSisNearZero.
+    Cycle      Total    Timestep Mech Aratio       Clock
+--------- ---------- ----------- ----------- ----------- 
+      204       1319 8.68262E-07  7.9855e-03 00:00:00:01   2000000                         8.0000e-03             
+--- Limit aratio of 8.0000e-03 met in process(es): mech Ball (7.9855e-03),mech Clump (0.0000e+00).
+--- Cycling ended at: 2017-04-10 17:03:42
+   **Static equilibrium obtained within desired tolerance.
+   Target  material pressure: 3e+07
+   Current material pressure: 5.44028e+07
+   Target  pressure tolerance: 0.01
+   Current pressure tolerance: 0.813426
+     Iteration: 2
+     Scaling grains by factor: 0.99212
+           Accumulated factor: 0.966869
+   Cycle until mean stress is near zero or static equilibrium is obtained.
+pfc3d>cycle 10
+    Cycle      Total    Timestep       Clock
+--------- ---------- ----------- ----------- 
+       10       1329 8.46189E-07 00:00:00:00        10                                    
+--- Global cycle limit of 10 met.
+--- Cycling ended at: 2017-04-10 17:03:42
+pfc3d>solve fishhalt _mpMSisNearZero aratio [pk_ARatLimit] max_cycles [pk_stepLimit]
+--- Global FishHalt function _mpMSisNearZero.
+    Cycle      Total    Timestep Mech Aratio       Clock
+--------- ---------- ----------- ----------- ----------- 
+      123       1452 8.45630E-07  7.9832e-03 00:00:00:00   2000000                         8.0000e-03             
+--- Limit aratio of 8.0000e-03 met in process(es): mech Ball (7.9832e-03),mech Clump (0.0000e+00).
+--- Cycling ended at: 2017-04-10 17:03:43
+   **Static equilibrium obtained within desired tolerance.
+   Target  material pressure: 3e+07
+   Current material pressure: 3.66702e+07
+   Target  pressure tolerance: 0.01
+   Current pressure tolerance: 0.222342
+     Iteration: 3
+     Scaling grains by factor: 0.997714
+           Accumulated factor: 0.964659
+   Cycle until mean stress is near zero or static equilibrium is obtained.
+pfc3d>cycle 10
+    Cycle      Total    Timestep       Clock
+--------- ---------- ----------- ----------- 
+       10       1462 8.50741E-07 00:00:00:00        10                                    
+--- Global cycle limit of 10 met.
+--- Cycling ended at: 2017-04-10 17:03:44
+pfc3d>solve fishhalt _mpMSisNearZero aratio [pk_ARatLimit] max_cycles [pk_stepLimit]
+--- Global FishHalt function _mpMSisNearZero.
+    Cycle      Total    Timestep Mech Aratio       Clock
+--------- ---------- ----------- ----------- ----------- 
+       59       1521 8.41526E-07  7.9989e-03 00:00:00:00   2000000                         8.0000e-03             
+--- Limit aratio of 8.0000e-03 met in process(es): mech Ball (7.9989e-03),mech Clump (0.0000e+00).
+--- Cycling ended at: 2017-04-10 17:03:44
+   **Static equilibrium obtained within desired tolerance.
+   Target  material pressure: 3e+07
+   Current material pressure: 3.17308e+07
+   Target  pressure tolerance: 0.01
+   Current pressure tolerance: 0.0576918
+     Iteration: 4
+     Scaling grains by factor: 0.999397
+           Accumulated factor: 0.964077
+   Cycle until mean stress is near zero or static equilibrium is obtained.
+pfc3d>cycle 10
+    Cycle      Total    Timestep       Clock
+--------- ---------- ----------- ----------- 
+       10       1531 8.40376E-07 00:00:00:00        10                                    
+--- Global cycle limit of 10 met.
+--- Cycling ended at: 2017-04-10 17:03:45
+pfc3d>solve fishhalt _mpMSisNearZero aratio [pk_ARatLimit] max_cycles [pk_stepLimit]
+--- Global FishHalt function _mpMSisNearZero.
+    Cycle      Total    Timestep Mech Aratio       Clock
+--------- ---------- ----------- ----------- ----------- 
+       18       1549 8.40599E-07  7.9825e-03 00:00:00:00   2000000                         8.0000e-03             
+--- Limit aratio of 8.0000e-03 met in process(es): mech Ball (7.9825e-03),mech Clump (0.0000e+00).
+--- Cycling ended at: 2017-04-10 17:03:45
+   **Static equilibrium obtained within desired tolerance.
+   Target  material pressure: 3e+07
+   Current material pressure: 3.03186e+07
+   Target  pressure tolerance: 0.01
+   Current pressure tolerance: 0.0106208
+     Iteration: 5
+     Scaling grains by factor: 0.999889
+           Accumulated factor: 0.96397
+   Cycle until mean stress is near zero or static equilibrium is obtained.
+pfc3d>cycle 10
+    Cycle      Total    Timestep       Clock
+--------- ---------- ----------- ----------- 
+       10       1559 8.40517E-07 00:00:00:00        10                                    
+--- Global cycle limit of 10 met.
+--- Cycling ended at: 2017-04-10 17:03:45
+pfc3d>solve fishhalt _mpMSisNearZero aratio [pk_ARatLimit] max_cycles [pk_stepLimit]
+--- Global FishHalt function _mpMSisNearZero.
+    Cycle      Total    Timestep Mech Aratio       Clock
+--------- ---------- ----------- ----------- ----------- 
+        1       1560 6.82303E-07  7.7507e-03 00:00:00:00   2000000                         8.0000e-03             
+--- Limit aratio of 8.0000e-03 met in process(es): mech Ball (7.7507e-03),mech Clump (0.0000e+00).
+--- Cycling ended at: 2017-04-10 17:03:45
+   **Static equilibrium obtained within desired tolerance.
+   Target  material pressure: 3e+07
+   Current material pressure: 3.0078e+07
+   Target  pressure tolerance: 0.01
+   Current pressure tolerance: 0.00259945
+   **Target pressure achieved within desired tolerance.
+## _mpPackGrainScale (exiting)
+pfc3d>cmat default type [myTypeStr(tidx)]                      model [cmName]                      method deformability emod [emod] krat [krat]                      property fric [fric] inheritance off rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0                      proximity [prox]
+pfc3d>cmat default type [myTypeStr(tidx)]                      model [cmName]                      method deformability emod [emod] krat [krat]                      property fric [fric] inheritance off rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0                      proximity [prox]
+pfc3d>cmat default type [myTypeStr(tidx)]                      model [cmName]                      method deformability emod [emod] krat [krat]                      property fric [fric] inheritance off rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0                      proximity [prox]
+pfc3d>clean
+pfc3d>cmat default type [myTypeStr(tidx)]                      model [cmName]                      method deformability emod [emod] krat [krat]                      property fric [fric] inheritance off rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0                      proximity [prox]
+pfc3d>cmat default type [myTypeStr(tidx)]                      model [cmName]                      method deformability emod [emod] krat [krat]                      property fric [fric] inheritance off rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0                      proximity [prox]
+pfc3d>cmat default type [myTypeStr(tidx)]                      model [cmName]                      method deformability emod [emod] krat [krat]                      property fric [fric] inheritance off rgap 0.0 lin_mode 0 dp_nratio 0.0 dp_sratio 0.0                      proximity [prox]
+pfc3d>clean
+pfc3d>ball attribute contactforce (0.0,0.0,0.0)  contactmoment (0.0,0.0,0.0)
+--- Attribute contactforce initialized in 1276 ball(s).
+--- Attribute contactmoment initialized in 1276 ball(s).
+pfc3d>ball attribute velocity     (0.0,0.0,0.0)  spin          (0.0,0.0,0.0)
+--- Attribute velocity initialized in 1276 ball(s).
+--- Attribute spin initialized in 1276 ball(s).
+pfc3d>ball attribute displacement (0.0,0.0,0.0)
+--- Attribute displacement initialized in 1276 ball(s).
+** ft_eq (entering with parameters: ARatLimit: 0.008, stepLimit: 2000000)
+pfc3d>cycle 1
+    Cycle      Total    Timestep       Clock
+--------- ---------- ----------- ----------- 
+        1       1561 6.91310E-07 00:00:00:00         1                                    
+--- Global cycle limit of 1 met.
+--- Cycling ended at: 2017-04-10 17:03:46
+pfc3d>solve aratio @ARatLimit max_cycles @stepLimit
+    Cycle      Total    Timestep Mech Aratio       Clock
+--------- ---------- ----------- ----------- ----------- 
+        1       1562 6.91310E-07  0.0000e+00 00:00:00:00   2000000                         8.0000e-03             
+--- Limit aratio of 8.0000e-03 met in process(es): mech Ball (0.0000e+00),mech Clump (0.0000e+00).
+--- Cycling ended at: 2017-04-10 17:03:46
+** ft_eq (exiting with condition: ARatLimit met) [Mech Aratio: 0]
+pfc3d>title [titStr]
+pfc3d>save [fName] localdir
+--- Model saved to file D:/Itasca/pfc3d500/My Projects/fistPkg25/ExampleProjects/MatGen-ContactBonded/SS_ContactBonded-matV.p3sav
+pfc3d>set fish callback 42.1  remove mv_wStress
+pfc3d>set fish callback 10.10 remove mv_wStrain
+pfc3d>set fish callback 10.10 remove mv_wPoros
+** ft_eq (entering with parameters: ARatLimit: 0.008, stepLimit: 2000000)
+pfc3d>cycle 1
+    Cycle      Total    Timestep       Clock
+--------- ---------- ----------- ----------- 
+        1       1563 6.91310E-07 00:00:00:00         1                                    
+--- Global cycle limit of 1 met.
+--- Cycling ended at: 2017-04-10 17:03:46
+pfc3d>solve aratio @ARatLimit max_cycles @stepLimit
+    Cycle      Total    Timestep Mech Aratio       Clock
+--------- ---------- ----------- ----------- ----------- 
+        1       1564 6.91310E-07  0.0000e+00 00:00:00:00   2000000                         8.0000e-03             
+--- Limit aratio of 8.0000e-03 met in process(es): mech Ball (0.0000e+00),mech Clump (0.0000e+00).
+--- Cycling ended at: 2017-04-10 17:03:46
+** ft_eq (exiting with condition: ARatLimit met) [Mech Aratio: 0]
+pfc3d>history reset
+--- All histories have been deleted and their data erased.
+pfc3d>ball  attribute displacement (0.0,0.0,0.0)
+--- Attribute displacement initialized in 1276 ball(s).
+pfc3d>title [titStr]
+pfc3d>save [fName] localdir
+--- Model saved to file D:/Itasca/pfc3d500/My Projects/fistPkg25/ExampleProjects/MatGen-ContactBonded/SS_ContactBonded-mat.p3sav
+## mpMake (exiting).
+pfc3d>@mvListProps
+## Material-Vessel Properties:
+     mv_type: 0 (physical)
+     mv_shape: 0 (rectangular cuboid)
+     {mv_H, _wdz} (height {initial, current}, aligned with z-axis): {0.05,0.05}
+     {mv_W, _wdy} ( width {initial, current}, aligned with y-axis): {0.05,0.05}
+     {mv_D, _wdx} ( depth {initial, current}, aligned with x-axis): {0.05,0.05}
+     mv_expandFac: 1.2
+     mv_emod (effective modulus): 3e+09
+     mv_insetLFac (measurement region spanning-length factor): 0.8
+     mv_insetDFac (measurement region diameter factor): 0.8
+pfc3d>@mpListMicroProps
+## Material Microproperties:
+   Common group:
+     cm_matName (material name): SS_ContactBonded
+     cm_matType (material-type code): 1 (contact-bonded)
+     cm_localDampFac (local-damping factor): 0.7
+     cm_densityCode: 1 (cm_densityVal is bulk density)
+     cm_densityVal: 1960
+     Grain shape & size distribution group:
+       cm_shape (grain-shape code): 0 (all balls)
+       cm_nSD (number of size distributions): 1
+         cm_typeSD(1): 0 (uniform)
+         cm_Dlo(1): 0.004
+         cm_Dup(1): 0.006
+         cm_Vfrac(1): 1
+       cm_Dmult (diameter multiplier): 1
+   Packing group:
+     pk_seed (seed of random-number generator): 10000
+     pk_Pm (material pressure): 3e+07
+     pk_PTol (pressure tolerance): 0.01
+     pk_ARatLimit (equilibrium-ratio limit): 0.008
+     pk_stepLimit (step limit): 2000000
+     pk_procCode (packing-procedure code): 1 (grain scaling)
+     pk_nc (grain-cloud porosity): 0.3
+     _pkORmaxLimit (overlap-ratio maximum limit): 0.25
+     _pkORupdateRate (overlap-ratio update rate, number of cycles): 100
+   Contact-bonded material group:
+     Linear group:
+       cbm_emod (effective modulus): 3e+09
+       cbm_krat (stiffness ratio): 1.5
+       cbm_fric (friction coefficient): 0.4
+     Contact-bond group:
+       cbm_igap (installation gap): 0
+       cbm_tens_m    (tensile-strength distribution [stress], mean): 1e+06
+       cbm_tens_sd   (tensile-strength distribution [stress], standard deviation): 0
+       cbm_shears_m  (shear-strength   distribution [stress], mean): 2e+07
+       cbm_shears_sd (shear-strength   distribution [stress], standard deviation): 0
+   Linear material group:
+     lnm_emod (effective modulus): 3e+09
+     lnm_krat (stiffness ratio): 1.5
+     lnm_fric (friction coefficient): 0.4
+pfc3d>@mpListMicroStrucProps
+## Material Microstructural Properties [# is "number of"]:
+   Grain Size and Packing Information:
+     mp_nGN (# grains): 1276
+     Grain-size distribution (GSD) via gsdMeasure(numBins) to create table GSD, 
+       which is displayed in view pl-GSD.
+     mp_Davg               (average grain diameter): 0.00483103
+     mp_D50                ( median grain diameter): 0.00511959
+     mp_PhiVavg (vessel resolution w.r.t. mp_Davg ): 10.3498
+     mp_PhiV50  (vessel resolution w.r.t. mp_D50  ): 9.76642
+     mv_mn (measurement-based porosity): 0.330279
+     mp_ORs (overlap ratios {max, min, avg}): {0.063344,3.9193e-06,0.0106566}
+   Contact Information:
+     mp_nLNc  (# active linear-based             contacts): 3882
+     mp_nLNgg (# active linear-based grain-grain contacts): 3882
+     mp_nLNgw (# active linear-based grain-wall  contacts): 0
+   Bonded-Material Information:
+     mp_CNb (bond coordination number via bcnMeasure): 6.08464
+     mp_nCBb  (# contact-bonded  bonds): 3882
+     mp_nPBb  (# parallel-bonded bonds): 0
+     mp_nFJc  (# flat-jointed contacts): 0
+     mp_nFJe  (# flat-jointed elements): 0
+     mp_nFJb  (# flat-jointed    bonds): 0
+pfc3d>;#######################################################
+pfc3d> 
+pfc3d>set log off
+**********************************************
+* Logging ended at 周一 4月 10 17:03:47 2017
+**********************************************

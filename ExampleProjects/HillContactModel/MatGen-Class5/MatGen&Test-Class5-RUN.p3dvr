@@ -1,0 +1,14 @@
+;fname: MatGen&Test-Class5-RUN.p3dvr
+set logfile MatGen&Test-Class5-RUN.p3log
+set log on truncate
+
+new
+system clone timeout -1 MatGen-Class5.p3prj ...
+       call MatGen-Class5.p3dvr
+system clone timeout -1 CompTest\CompTest-Class5.p3prj ...
+       call CompTest-Class5.p3dvr
+
+set log off
+exit
+return
+;EOF: MatGen&Test-Class5-RUN.p3dvr

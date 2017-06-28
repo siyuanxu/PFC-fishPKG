@@ -1,0 +1,26 @@
+**********************************************
+* Logging started at 周一 4月 10 17:03:27 2017
+* By pfc3d Version 5.00 Release 030
+* 
+* 
+* Job Title: 
+**********************************************
+pfc3d> 
+pfc3d>new
+pfc3d>load fish "plugins/fish/fishuser_function005_64.dll"
+--- fish plugin user_function already loaded.
+pfc3d>set deterministic on
+pfc3d>set precision 6
+pfc3d>system clone timeout -1 MatGen.p3prj ...
+pfc3d>       call MatGen.p3dvr
+pfc3d>system clone timeout -1 CompTest\CompTest.p3prj ...
+pfc3d>       call CompTest.p3dvr
+pfc3d>system clone timeout -1 DiamCompTest\DiamCompTest.p3prj ...
+pfc3d>       call DiamCompTest.p3dvr
+pfc3d>system clone timeout -1 TenTest\TenTest.p3prj ...
+pfc3d>       call TenTest.p3dvr
+pfc3d> 
+pfc3d>set log off
+**********************************************
+* Logging ended at 周一 4月 10 17:09:54 2017
+**********************************************

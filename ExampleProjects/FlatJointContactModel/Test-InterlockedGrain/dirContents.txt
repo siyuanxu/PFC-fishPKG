@@ -1,0 +1,9 @@
+;fname: dirContents.txt [fistPkg\ExampleProjects\FlatJointContactModel\
+;                        Test-InterlockedGrain]
+;
+  Test-ILGrain.p3prj
+  Test-ILGrain.p3dat
+  Test-ILGrain.p2prj
+  Test-ILGrain.p2dat
+;
+;EOF: dirContents.txt

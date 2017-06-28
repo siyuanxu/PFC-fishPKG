@@ -1,0 +1,16 @@
+;fname: dirContents.txt [fistPkg\ExampleProjects\HillContactModel\
+;                        MatGen-Class5]
+;
+  Material Genesis project
+    PFC3D:
+      MatGen&Test-Class5-RUN.p3prj
+      MatGen&Test-Class5-RUN.p3dvr
+      MatGen-Class5.p3prj
+      MatGen-Class5.p3dvr
+      mvParams-Class5.p3dat
+      mpParams-C5n_Linear.p3dat
+      mpParams-C5b_Linear.p3dat
+      mpParams-C5n_Hill.p3dat
+      mpParams-C5b_Hill.p3dat
+;
+;EOF: dirContents.txt

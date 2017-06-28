@@ -1,0 +1,32 @@
+;fname: CompTest.p3dvr
+;
+;  IN:  ctParams.p3dat
+;       Saved State (with corresponding model title):
+;         <cm_matName>-matV : specimen in material vessel
+;  OUT: CompTest.p3log
+;       Saved States (with corresponding model titles):
+;         <cm_matName>-ctN : end of loading stage N (N = 0,1,2,...)
+;                            (loading stage 0 is seating phase)
+;
+;=============================================================================
+set logfile CompTest.p3log
+set log     on truncate
+set echo    on
+
+;#######################################################
+restore ..\AG_Linear-matV.p3sav
+
+call ..\..\fistSrc\ct.fis suppress
+call ctParams.p3dat       suppress
+
+@msOff
+@ctSeatingPhase
+@ft_ZeroGrainDisplacement
+@ctLoadingPhase
+;#######################################################
+
+set log off
+gui project save
+;exit
+return
+;EOF: CompTest.p3dvr

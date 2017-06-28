@@ -1,0 +1,191 @@
+;fname: monitorIt.fis
+;------------------------------------------------
+def mi_init
+  msPBi_sfacRad = 1.0
+  msPBc_sfacRad = 1.0
+  msPBc_sfacLen = 1.0
+  msFJi_sfacRad = 1.0
+  ckInit
+
+  _miCP = contact.find('ball-ball', 1, 2)
+  _miB1P = ball.find(1)
+  _miB2P = ball.find(2)
+  command
+    set fish callback 42.1 mi_updateLocalSys ; after FDLaw
+  end_command
+  ft_cexNum = 3
+end
+;------------------------------------------------
+def mi_updateLocalSys  ; Store contact-plane coord. system in extra slots {1,2,3}={nc,sc,tc}.
+  contact.extra( _miCP, 1 ) = mi_nc
+  contact.extra( _miCP, 2 ) = mi_sc
+  contact.extra( _miCP, 3 ) = mi_tc
+end
+def mi_nc  ; Contact-plane normal direction (nc)
+  mi_nc = contact.normal(_miCP)
+end
+def mi_sc  ; Contact-plane coord. system (s axis, sc)
+  if global.dim == 3 then
+    mi_sc = contact.shear(_miCP)
+  else ; 2D model
+    mi_sc = 0 ; in global system, sc = (0, 0, -1)
+  end_if
+end
+def mi_tc  ; Contact-plane coord. system (t axis, tc)
+  if global.dim == 3 then
+    mi_tc = math.cross( mi_nc, mi_sc )
+  else ; 2D model
+    mi_tc = contact.shear(_miCP)
+  end_if
+end
+;**********
+def mi_xc  ; Contact-plane location (xc)
+  mi_xc = contact.pos(_miCP)
+end
+;------------------------------------------------
+def mi_F1 ; reaction force on ball-1
+  mi_F1 = -ball.force.unbal(_miB1P)
+end
+def mi_F2 ; reaction force on ball-2
+  mi_F2 = -ball.force.unbal(_miB2P)
+end
+;**********
+def mi_M1 ; reaction moment on ball-1
+  mi_M1 = -ball.moment.unbal(_miB1P)
+end
+def mi_M2 ; reaction moment on ball-2
+  mi_M2 = -ball.moment.unbal(_miB2P)
+end
+
+;------------------------------------------------
+; Parallel-bond properties:
+def mi_barFn  ; mi_barFn > 0 is tension
+  if contact.model(_miCP) == 'linearpbond' then
+    mi_barFn = -comp( contact.prop( _miCP, 'pb_force' ), 1 )
+  else
+    mi_barFn = 0.0
+  end_if
+end
+def mi_barFss
+  if contact.model(_miCP) == 'linearpbond' then
+    if global.dim == 3 then
+      mi_barFss = comp( contact.prop( _miCP, 'pb_force' ), 2 )
+    else ; 2D model
+      mi_barFss = 0.0
+    end_if
+  else
+    mi_barFss = 0.0
+  end_if
+end
+def mi_barFst
+  if contact.model(_miCP) == 'linearpbond' then
+    if global.dim == 3 then
+      mi_barFst = comp( contact.prop( _miCP, 'pb_force' ), 3 )
+    else ; 2D model
+      mi_barFst = comp( contact.prop( _miCP, 'pb_force' ), 2 )
+    end_if
+  else
+    mi_barFst = 0.0
+  end_if
+end
+;**********
+def mi_barMt
+  if contact.model(_miCP) == 'linearpbond' then
+    if global.dim == 3 then
+      mi_barMt = comp( contact.prop( _miCP, 'pb_moment' ), 1 )
+    else ; 2D model
+      mi_barMt = 0.0
+    end_if
+  else
+    mi_barMt = 0.0
+  end_if
+end
+def mi_barMbs
+  if contact.model(_miCP) == 'linearpbond' then
+    if global.dim == 3 then
+      mi_barMbs = comp( contact.prop( _miCP, 'pb_moment' ), 2 )
+    else ; 2D model
+      mi_barMbs = contact.prop( _miCP, 'pb_moment' )
+    end_if
+  else
+    mi_barMbs = 0.0
+  end_if
+end
+def mi_barMbt
+  if contact.model(_miCP) == 'linearpbond' then
+    if global.dim == 3 then
+      mi_barMbt = comp( contact.prop( _miCP, 'pb_moment' ), 3 )
+    else ; 2D model
+      mi_barMbt = 0.0
+    end_if
+  else
+    mi_barMbt = 0.0
+  end_if
+end
+;------------------------------------------------
+; Flat-joint properties:
+def mi_sqFn  ; mi_sqFn > 0 is tension
+  if contact.model(_miCP) == 'flatjoint' then
+    mi_sqFn = -comp( contact.prop( _miCP, 'fj_force' ), 1 )
+  else
+    mi_sqFn = 0.0
+  end_if
+end
+def mi_sqFss
+  if contact.model(_miCP) == 'flatjoint' then
+    if global.dim == 3 then
+      mi_sqFss = comp( contact.prop( _miCP, 'fj_force' ), 2 )
+    else ; 2D model
+      mi_sqFss = 0.0
+    end_if
+  else
+    mi_sqFss = 0.0
+  end_if
+end
+def mi_sqFst
+  if contact.model(_miCP) == 'flatjoint' then
+    if global.dim == 3 then
+      mi_sqFst = comp( contact.prop( _miCP, 'fj_force' ), 3 )
+    else ; 2D model
+      mi_sqFst = comp( contact.prop( _miCP, 'fj_force' ), 2 )
+    end_if
+  else
+    mi_sqFst = 0.0
+  end_if
+end
+;**********
+def mi_sqMt
+  if contact.model(_miCP) == 'flatjoint' then
+    if global.dim == 3 then
+      mi_sqMt = comp( contact.prop( _miCP, 'fj_moment' ), 1 )
+    else ; 2D model
+      mi_sqMt = 0.0
+    end_if
+  else
+    mi_sqMt = 0.0
+  end_if
+end
+def mi_sqMbs
+  if contact.model(_miCP) == 'flatjoint' then
+    if global.dim == 3 then
+      mi_sqMbs = comp( contact.prop( _miCP, 'fj_moment' ), 2 )
+    else ; 2D model
+      mi_sqMbs = contact.prop( _miCP, 'fj_moment' )
+    end_if
+  else
+    mi_sqMbs = 0.0
+  end_if
+end
+def mi_sqMbt
+  if contact.model(_miCP) == 'flatjoint' then
+    if global.dim == 3 then
+      mi_sqMbt = comp( contact.prop( _miCP, 'fj_moment' ), 3 )
+    else ; 2D model
+      mi_sqMbt = 0.0
+    end_if
+  else
+    mi_sqMbt = 0.0
+  end_if
+end
+return
+;EOF: monitorIt.fis

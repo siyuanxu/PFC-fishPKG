@@ -1,0 +1,39 @@
+;fname: DiamCompTest.p2dvr
+;
+;  IN:  dcParams.p2dat
+;       Saved State (with corresponding model title):
+;         <cm_matName>-mat : specimen removed from material vessel
+;  OUT: DiamCompTest.p2log
+;       Saved States (with corresponding model titles):
+;         <cm_matName>-dcN : end of loading stage N (N = 0,1,2,...)
+;                            (loading stage 0 is set-up phase)
+;
+;=============================================================================
+set logfile DiamCompTest.p2log
+set log     on truncate
+set echo    on
+
+;#######################################################
+restore ..\SS_FlatJointed2D-mat.p2sav
+
+;** Carve out cylindrical specimen, with cylinder axis in unit-thickness direction.
+ball  delete range circle center (0.0, 0.0) radius 25.0e-3 not
+clump delete range circle center (0.0, 0.0) radius 25.0e-3 not
+
+call ..\..\fistSrc\ck.fis suppress
+call ..\..\fistSrc\dc.fis suppress
+call dcParams.p2dat       suppress
+
+@msOff
+@ckInit
+@dcSetupPhase
+@ft_ZeroGrainDisplacement
+@dcLoadingPhase
+@ckListData
+;#######################################################
+
+set log off
+gui project save
+exit
+return
+;EOF: DiamCompTest.p2dvr

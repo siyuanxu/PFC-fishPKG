@@ -1,0 +1,94 @@
+;fname: Test-hillMoisture.p3dat
+load contactmodelmechanical hill
+
+new
+title 'Test-hillMoisture'
+
+domain extent -10 10
+cmat default model hill
+
+ball create id 1 radius 7.5e-3 position (0.0,  0.0,    0.0) group bottom_ball
+ball create id 2 radius 5.0e-3 position (0.0, 12.5e-3, 0.0) group top_ball
+ball attribute density 2650.0 damp 0.7
+ball property young_mod 29.0e9 pois_ratio 0.15
+clean
+
+call monitorIt2.p3fis
+@mi_init
+
+contact property fric_coef 0.4 suction 200e3 damp_con 0.07
+ball fix spin velocity range group bottom_ball
+contact method make_wet gap 0.0
+cycle 1
+solve unbalanced 1e-10
+ball list attribute displacement  ; ydispOfball2 = -5.9463e-6 m
+contact list force     ; Contact force is zero (surface force balanced by moisture force).
+contact list property  ; First component of surf_force = mois_force = 15.708 N
+pause
+
+set timestep fix 1.0e-6
+ball fix spin velocity        range group top_ball
+;**********
+ball attribute yvelocity 3.13 range group top_ball
+cycle 3196
+pause
+
+; *** CASE 1:
+;  ball attribute yvelocity 0.0 range group top_ball
+;  ball free spin velocity      range group top_ball
+;  solve unbalanced 1e-10
+;  ball list attribute displacement  ; ydispOfball2 = -5.9463e-6 m
+;  contact list force     ; Contact force is zero (surface force balanced by moisture force).
+;  contact list property  ; First component of surf_force = mois_force = 15.708 N
+
+; *** CASE 2: Confirm that contact can be made to form when a given moisture gap is reached,
+;             and that this contact can be made wet. After it is wet, then freeing the top ball
+;             (as for CASE 2) should allow this ball to reach the equilibrium position at which
+;             the surface force is balanced by the moisture force. The new contact should be
+;             assigned properties, but in this case, it will be okay because only the stiffness
+;             coefficients are relevant, and these get assigned via the surface properties
+;             of the two bodies (the surfProps already exist).
+cycle 1  ; liquid bridge ruptures making contact inactive and allowing contact to be deleted.
+pause
+ball attribute yvelocity -3.13 range group top_ball
+cycle 2556  ; the gap is just less than 2.0 mm
+pause
+
+;------------------------------------------------
+def pd_makeMoist( gm )
+; Add moisture between all grains with a gap less than the moisture gap (gm).
+; NOTE: This function is replaced by functionality of hlm_makeWet. We do not use this here, because
+;       it requires more complex property specification that clouds the simplicity of this example.
+;
+; PARAMS:
+;   gm : moisture gap, and hill matProps are hardcoded
+;
+  local myStr = '## pd_makeMoist (entering with parameter:'
+  myStr = myStr + ' gm: '+string(gm)+')'
+  io.out( myStr )
+
+  ; 1. Specify moisture gap as proximity in CMAT.
+  ; 2. Execute CLEAN command, which applies the CMAT and may create new grain-grain contacts.
+  ;    Contacts will exist at all grains within gm of one another.
+  ; 3. Add moisture to all contacts with a gap less than or equal to the moisture gap.
+  ; 4. Perform a cycle to activate and update the moisture force in all new contacts.
+  command
+    cmat default type ball-ball ...
+                 model hill ...
+                 property fric_coef 0.4 suction 200e3 damp_con 0.07 ...
+                 proximity [gm]
+    clean
+    contact method make_wet gap [gm]
+  end_command
+  io.out('## pd_makeMoist (exiting).')
+end
+;------------------------------------------------
+@pd_makeMoist( 2.5e-3 ) ; Add moisture between all grains with a gap less than 2.5 mm.
+cycle 1
+pause
+ball attribute yvelocity 0.0 range group top_ball
+ball free spin velocity      range group top_ball
+solve unbalanced 1e-10
+
+return
+;EOF: Test-hillMoisture.p3dat

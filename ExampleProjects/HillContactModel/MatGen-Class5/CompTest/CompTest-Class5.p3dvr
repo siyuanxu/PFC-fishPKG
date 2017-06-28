@@ -1,0 +1,69 @@
+;fname: CompTest-Class5.p3dvr
+;
+;  IN:  ctParams.p3dat
+;       Saved State (with corresponding model title):
+;         [ C5{n,b}_{Linear,Hill} ]-matV : specimen in material vessel
+;  OUT: CompTest-Class5.p3log
+;       Saved States (with corresponding model titles):
+;         [ C5{n,b}_{Linear,Hill},
+;           C5b_Hill_suc20kPa      ]-ctN : end of loading stage N (N = 0,1,2,...)
+;                                         (loading stage 0 is seating phase)
+;
+;=============================================================================
+set logfile CompTest-Class5.p3log
+set log     on truncate
+set echo    on
+
+;#;#######################################################
+restore ..\C5n_Linear-matV.p3sav
+call ..\..\..\fistSrc\ct.fis suppress
+call ctParams.p3dat          suppress
+@msOff
+@ctSeatingPhase
+ball attribute displacement (0.0,0.0,0.0)
+@ctLoadingPhase
+;#######################################################
+restore ..\C5b_Linear-matV.p3sav
+call ..\..\..\fistSrc\ct.fis suppress
+call ctParams.p3dat          suppress
+@msOff
+@ctSeatingPhase
+ball attribute displacement (0.0,0.0,0.0)
+@ctLoadingPhase
+;#######################################################
+restore ..\C5n_Hill-matV.p3sav
+call ..\..\..\fistSrc\ct.fis suppress
+call ctParams.p3dat          suppress
+@msOff
+@ctSeatingPhase
+ball attribute displacement (0.0,0.0,0.0)
+@ctLoadingPhase
+;#######################################################
+restore ..\C5b_Hill-matV.p3sav
+call ..\..\..\fistSrc\ct.fis suppress
+call ctParams.p3dat          suppress
+@msOff
+@ctSeatingPhase
+ball attribute displacement (0.0,0.0,0.0)
+@ctLoadingPhase
+;######################################################
+; ** Test the wet C5b_Hill material.
+restore ..\C5b_Hill-matV.p3sav
+call ..\..\..\fistSrc\ct.fis suppress
+call ctParams.p3dat          suppress
+
+; ** Add 20 kPa suction btn. grains within 3.0 mm of one another.
+[cm_matName = cm_matName + '_suc20kPa']
+@hlm_makeWet( 20.0e3, 3.0e-3 )
+
+@msOff
+@ctSeatingPhase
+ball attribute displacement (0.0,0.0,0.0)
+@ctLoadingPhase
+;######################################################
+
+set log off
+gui project save
+exit
+return
+;EOF: CompTest-Class5.p3dvr

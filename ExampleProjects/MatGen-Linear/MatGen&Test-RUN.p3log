@@ -1,0 +1,17 @@
+**********************************************
+* Logging started at ÖÜ¶þ 4ÔÂ 4 20:48:10 2017
+* By pfc3d Version 5.00 Release 030
+* 
+* 
+* Job Title: 
+**********************************************
+pfc3d> 
+pfc3d>new
+pfc3d>load fish "plugins/fish/fishuser_function005_64.dll"
+--- fish plugin user_function already loaded.
+pfc3d>set deterministic on
+pfc3d>set precision 6
+pfc3d>system clone timeout -1 MatGen.p3prj ...
+pfc3d>       call MatGen.p3dvr
+*** Processing interrupted by user.
+    While processing line 7 of file D:/Itasca/pfc3d500/My Projects/fistPkg25/ExampleProjects/MatGen-Linear/MatGen&Test-RUN.p3dvr.

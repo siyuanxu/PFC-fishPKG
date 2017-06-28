@@ -1,0 +1,27 @@
+;fname: ttParams.p3dat
+
+; ** Direct-tension test with 5 mm grip region to 80% post-peak load.
+def ttSetParams
+; Set Direct-Tension Test Parameters.
+  tt_tg = 5.0e-3
+  tt_eRate = 0.05
+  tt_loadCode = 0
+  tt_loadFac = 0.8
+end
+@ttSetParams
+@_ttCheckParams
+@ttListProps
+
+; Specify histories to be monitored during the test.
+  history reset
+  history nstep 10
+  ; Measurement-based axial stress and axial strain:
+  history add id=101 fish mv_msa
+  history add id=201 fish mv_mea
+  ; Cracks:
+  history add id=41 fish ck_nALL
+  history add id=42 fish ck_nFJt
+  history add id=43 fish ck_nFJs
+
+return
+;EOF: ttParams.p3dat

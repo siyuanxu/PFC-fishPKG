@@ -1,0 +1,20 @@
+;fname: Test-linear.p3dat
+new
+title 'Test-linear'
+
+domain extent -10 10
+cmat default model linear
+
+ball create id 1 radius 7.5e-3 position (0.0,  0.0,    0.0) group bottom_ball
+ball create id 2 radius 5.0e-3 position (0.0, 12.5e-3, 0.0) group top_ball
+ball attribute density 2650.0 damp 0.7
+clean
+
+contact method deformability emod 29.0e9 kratio 1.0
+contact property fric 0.4
+ball fix spin velocity range group bottom_ball any group top_ball any
+
+call runIt.p3dat
+
+return
+;EOF: Test-linear.p3dat

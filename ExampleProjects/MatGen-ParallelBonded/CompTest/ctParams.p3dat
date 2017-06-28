@@ -1,0 +1,43 @@
+;fname: ctParams.p3dat
+
+; ** Compression test fully unconfined to 80% post-peak load.
+def ctSetParams
+; Set Compression-Test Parameters.
+  ct_testType = 1
+  ct_Pc = 100.0e3
+  ct_eRate = 0.05
+  ct_loadCode = 0
+  ct_loadFac = 0.8
+end
+@ctSetParams
+@_ctCheckParams
+@ctListProps
+
+; Specify histories to be monitored during the compression test.
+  history reset
+  history nstep 10
+  ; Servo pressures and strains:
+  history add id=11 fish mv_wPx
+  history add id=12 fish mv_wPy
+  history add id=13 fish mv_wPz
+  history add id=14 fish mv_wPr
+  history add id=21 fish mv_wex
+  history add id=22 fish mv_wey
+  history add id=23 fish mv_wez
+  ; Wall-based stresses and strains:
+  history add id=101 fish mv_wsd
+  history add id=201 fish mv_wea
+  history add id=202 fish mv_wer
+  history add id=203 fish mv_wev
+  ; Measurement-based stresses and strains:
+  history add id=402 fish mv_mer
+  history add id=403 fish mv_mev
+  ; Measurement-based porosity:
+  history add id=31 fish mv_mn
+  ; Cracks:
+  history add id=41 fish ck_nALL
+  history add id=42 fish ck_nPBt
+  history add id=43 fish ck_nPBs
+
+return
+;EOF: ctParams.p3dat

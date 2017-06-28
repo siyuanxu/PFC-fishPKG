@@ -1,0 +1,32 @@
+;fname: runIt.dat
+
+call monitorIt.fis
+@mi_init
+
+set energy on
+set orientation on
+set timestep fix 1.0e-6
+
+@msFG_Track
+@msOn
+pause
+
+; Subject the top grain to two different motions (loading cases 1 and 3).
+;****************
+;*** Loading case 1:
+title 'Test-TwoGrains (Case 1)'
+ball attribute yvelocity 0.05 range group end2 ;
+cycle 20000                                    ; delta^2 = 1.0 mm
+ball attribute yvelocity 0.0  range group end2 ;
+;*** Loading case 3:
+;title 'Test-TwoGrains (Case 3)'
+;ball attribute spin -10.0 range group end1 ;
+;ball attribute spin  10.0 range group end2 ;
+;cycle 20000                                ; theta_z^1 = -0.2 rad, theta_z^2 = 0.2 rad
+;ball attribute spin   0.0 range group end1 ;
+;ball attribute spin   0.0 range group end2 ;
+
+cycle 5000 ; insure at full static equilibrium
+
+return
+;EOF: runIt.dat

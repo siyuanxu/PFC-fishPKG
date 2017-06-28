@@ -1,0 +1,15 @@
+;fname: dirContents.txt [fistPkgN\ExampleProjects\
+;                        MatGen-Hill]
+;
+  Material Genesis project
+    PFC3D:
+      MatGen&Test-RUN.p3prj
+      MatGen&Test-RUN.p3dvr
+      MatGen-MakePlots.p3dat
+      MatGen.p3prj
+      MatGen.p3dvr
+      mvParams.p3dat
+      mpParams.p3dat
+      mpParams-Clumped.p3dat
+;
+;EOF: dirContents.txt

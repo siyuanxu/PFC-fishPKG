@@ -1,0 +1,11 @@
+;fname: dirContents-Hill.txt [fistPkgN\ExampleProjects\
+;                             MatGen-Hill\myCompTest]
+;
+  Compression Test project
+    PFC3D:
+      CompTest-MakePlots.p3dat
+      CompTest.p3prj
+      CompTest.p3dvr
+      ctParams.p3dat
+;
+;EOF: dirContents.txt

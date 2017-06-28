@@ -1,0 +1,7 @@
+;fname: dirContents.txt [fistPkg\ExampleProjects\HillContactModel\
+;                        Test-AssemblyGraniteGrains]
+;
+  Test-hillAssembly.p3prj
+  Test-hillAssembly.p3dat
+;
+;EOF: dirContents.txt

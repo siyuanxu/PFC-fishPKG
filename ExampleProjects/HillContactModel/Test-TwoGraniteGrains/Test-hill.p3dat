@@ -1,0 +1,44 @@
+;fname: Test-hill.p3dat
+load contactmodelmechanical hill
+
+new
+title 'Test-hill'
+
+domain extent -10 10
+cmat default model hill
+
+ball create id 1 radius 7.5e-3 position (0.0,  0.0,    0.0) group bottom_ball
+ball create id 2 radius 5.0e-3 position (0.0, 12.5e-3, 0.0) group top_ball
+ball attribute density 2650.0 damp 0.7
+ball property young_mod 29.0e9 pois_ratio 0.15
+clean
+
+contact property fric_coef 0.4 suction 200e3 damp_con 0.07 ; Initial test
+;contact property fric_coef 0.4 suction 200e3              ; When testing normal dashpot
+;contact property fric_coef 1000.0 suction 200e3           ; When testing shear dashpot
+ball fix spin velocity range group bottom_ball any group top_ball any
+
+call runIt.p3dat
+
+; Study the effect of dashpots on the force-displacement response.
+;pause
+; The following block tests the normal dashpot:
+;  contact property damp_con 0.07
+;  ball attribute yvelocity -100.0 range group top_ball ;
+;  cycle 1
+;  ball attribute yvelocity    0.0 range group top_ball ;
+;  list @mi_Fn
+;  cycle 1
+;  list @mi_Fn
+
+; The following block tests the shear dashpot (comment out the block for the normal dashpot):
+;  contact property damp_con 0.07
+;  ball attribute zspin 1000.0 range group top_ball
+;  cycle 1
+;  ball attribute zspin    0.0 range group top_ball
+;  list @mi_FsMag
+;  cycle 1
+;  list @mi_FsMag
+
+return
+;EOF: Test-hill.p3dat

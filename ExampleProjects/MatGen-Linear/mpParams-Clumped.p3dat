@@ -1,0 +1,76 @@
+;fname: mpParams-Clumped.p3dat
+;
+; Specify the material properties:
+;   common, packing and material groups.
+;
+;#####################################################
+clump template create ...
+      pebcalculate ...
+      name dyad ...
+      pebbles 2 ...
+              0.5 3.0 0.0 0.0 ...
+              0.5 3.5 0.0 0.0
+clump template create ...
+      pebcalculate ...
+      name peanut ...
+      pebbles 3 ...
+              1.0  0.0 0.0 0.0 ...
+              0.5 -1.0 0.0 0.0 ...
+              0.5  1.0 0.0 0.0
+
+def mpSetCommonParams
+; Set common parameters.
+  cm_matName = 'AG_Linear'
+  ; ** Typical aggregate base layer of an asphalt-surface roadway (linear clumped material).
+  cm_matType = 0
+  cm_localDampFac = 0.7
+  cm_densityCode = 0
+  cm_densityVal = 2650.0
+
+  ; Grain shape & size distribution group:
+    cm_shape = 1
+    cm_nSD = 2
+    cm_typeSD = array.create(cm_nSD)
+    cm_ctName = array.create(cm_nSD)
+    cm_Dlo    = array.create(cm_nSD)
+    cm_Dup    = array.create(cm_nSD)
+    cm_Vfrac  = array.create(cm_nSD)
+    cm_ctName(1) = 'dyad'
+    cm_Dlo(   1) = 14.0e-3
+    cm_Dup(   1) = 20.0e-3
+    cm_Vfrac( 1) = 0.75
+    cm_ctName(2) = 'peanut'
+    cm_Dlo(   2) = 14.0e-3
+    cm_Dup(   2) = 20.0e-3
+    cm_Vfrac( 2) = 0.25
+end
+@mpSetCommonParams
+
+def mpSetPackingParams
+; Set packing parameters.
+  pk_Pm = 150.0e3
+  pk_procCode = 0
+  pk_nc = 0.43
+  ; Boundary-contraction group:
+    pk_fricCA = 0.0
+    pk_vLimit = 1.0
+end
+@mpSetPackingParams
+
+;#####################################################
+def mpSetLinParams
+; Set linear material parameters.
+  ; Common group (set in mpSetCommonParams)
+  ; Packing group (set in mpSetPackingParams)
+  ; Linear material group:
+    lnm_emod = 500e6
+    lnm_krat = 1.5
+    lnm_fric = 0.4
+end
+@mpSetLinParams
+
+@_mpCheckAllParams
+@mpListMicroProps
+
+return
+;EOF: mpParams-Clumped.p3dat

@@ -1,0 +1,20 @@
+;fname: mvParams.p3dat
+
+def mvSetParams
+; Set Material-Vessel Parameters.
+; ** Cubic vessel (of 50 mm side length, with a 3.0 GPa effective modulus).
+  mv_type  = 0
+  mv_shape = 0
+  mv_H = 50.0e-3
+  mv_W = 50.0e-3
+  mv_D = 50.0e-3
+  mv_emod = 3.0e9
+end
+@mvSetParams
+@_mvCheckParams
+@mvListProps
+
+@msBoxDefine( [vector(0.0, 0.0, 0.0)], [vector(20e-3, 20e-3, 20e-3)] ) ; centered cube (20 mm side)
+
+return
+;EOF: mvParams.p3dat

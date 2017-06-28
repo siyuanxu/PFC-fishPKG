@@ -1,0 +1,33 @@
+;fname: runIt.p3dat
+
+call monitorIt.p3fis
+@mi_init
+
+set energy on
+set orientation on
+set timestep fix 1.0e-6
+
+;**********
+ball attribute yvelocity -0.05 range group top_ball ;
+cycle 2000                                          ; 1: u_y = -0.1 mm
+ball attribute yvelocity  0.0  range group top_ball ;
+;**********
+[_delsMag = 0.0]
+[_zspin = 10.0]
+set fish callback 10.10 mi_update_delsMag  ; after EOMs
+  ball attribute zspin [_zspin] range group top_ball ;
+  cycle 2000                                         ; 2: theta_z = 0.02 rad
+  ball attribute zspin      0.0 range group top_ball ; ------------------
+set fish callback 10.10 remove mi_update_delsMag
+;**********
+;ball attribute xspin     10.0 range group top_ball ;
+;cycle 2000                                         ; 2: theta_x = 0.02 rad
+;ball attribute xspin      0.0 range group top_ball ; ------------------
+
+list ball attribute displacement ; ball2, 2: (0, -1.0e-4, 0)
+list ball attribute euler ; ball2, 2: ~1.15 degrees
+
+list @mi_Fn @mi_FsMag @mi_delsMag
+
+return
+;EOF: runIt.p3dat

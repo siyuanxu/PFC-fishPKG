@@ -1,0 +1,14 @@
+;fname: MatGen&Test-RUN.p3dvr
+set logfile MatGen&Test-RUN.p3log
+set log on truncate
+
+new
+system clone timeout -1 MatGen.p3prj ...
+       call MatGen.p3dvr
+system clone timeout -1 CompTest\CompTest.p3prj ...
+       call CompTest.p3dvr
+
+set log off
+exit
+return
+;EOF: MatGen&Test-RUN.p3dvr

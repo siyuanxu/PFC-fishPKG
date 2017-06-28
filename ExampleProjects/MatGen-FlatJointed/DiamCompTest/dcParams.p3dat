@@ -1,0 +1,30 @@
+;fname: dcParams.p3dat
+
+; ** Diametral-compression test to 80% post-peak load.
+def dcSetParams
+; Set Diametral-Compression Test Parameters.
+  dc_w  = 50.0e-3
+  dc_d  = 50.0e-3
+  dc_g0 = 50.0e-3
+  dc_eRate = 0.05
+  dc_loadCode = 0
+  dc_loadFac = 0.8
+end
+@dcSetParams
+@_dcCheckParams
+@dcListProps
+
+; Specify histories to be monitored during the test.
+  history reset
+  history nstep 10
+  ; Wall-based axial force, axial strain and axial displacement:
+  history add id=101 fish dc_wfa
+  history add id=201 fish dc_wea
+  history add id=301 fish dc_wda
+  ; Cracks:
+  history add id=41 fish ck_nALL
+  history add id=42 fish ck_nFJt
+  history add id=43 fish ck_nFJs
+
+return
+;EOF: dcParams.p3dat

@@ -1,0 +1,16 @@
+;fname: dirContents.txt [fistPkgN\ExampleProjects\
+;                        MatGen-X\CompTest]
+;
+  Compression Test project
+    PFC3D:
+      CompTest-MakePlots.p3dat
+      CompTest.p3prj
+      CompTest.p3dvr
+      ctParams.p3dat
+    PFC2D:
+      CompTest-MakePlots.p2dat
+      CompTest.p2prj
+      CompTest.p2dvr
+      ctParams.p2dat
+;
+;EOF: dirContents.txt

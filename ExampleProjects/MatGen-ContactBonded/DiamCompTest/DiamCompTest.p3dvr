@@ -1,0 +1,39 @@
+;fname: DiamCompTest.p3dvr
+;
+;  IN:  dcParams.p3dat
+;       Saved State (with corresponding model title):
+;         <cm_matName>-mat : specimen removed from material vessel
+;  OUT: DiamCompTest.p3log
+;       Saved States (with corresponding model titles):
+;         <cm_matName>-dcN : end of loading stage N (N = 0,1,2,...)
+;                            (loading stage 0 is set-up phase)
+;
+;=============================================================================
+set logfile DiamCompTest.p3log
+set log     on truncate
+set echo    on
+
+;#######################################################
+restore ..\SS_ContactBonded-mat.p3sav
+
+;** Carve out cylindrical specimen, with cylinder axis in x-direction.
+ball  delete range cylinder end1 ([-0.5*mv_D], 0, 0) end2 ([0.5*mv_D], 0, 0) radius 25.0e-3 not
+clump delete range cylinder end1 ([-0.5*mv_D], 0, 0) end2 ([0.5*mv_D], 0, 0) radius 25.0e-3 not
+
+call ..\..\fistSrc\ck.fis suppress
+call ..\..\fistSrc\dc.fis suppress
+call dcParams.p3dat       suppress
+
+@msOff
+@ckInit
+@dcSetupPhase
+@ft_ZeroGrainDisplacement
+@dcLoadingPhase
+@ckListData
+;#######################################################
+
+set log off
+gui project save
+exit
+return
+;EOF: DiamCompTest.p3dvr

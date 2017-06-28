@@ -1,0 +1,41 @@
+;fname: Test-TwoGrains_FJ.p2dat
+
+new
+title 'Test-TwoGrains'
+
+call ..\..\fistSrc\ft.fis suppress
+call ..\..\fistSrc\ck.fis suppress
+
+domain extent -50e-3 50e-3
+cmat default model flatjoint
+
+ball create id 1 radius 6.25e-3 position (0.0,  0.0,  ) group end1
+ball create id 2 radius 6.25e-3 position (0.0, 12.5e-3) group end2
+ball attribute density 2650.0 damp 0.7
+clean
+contact property fj_Nr 4 ...
+                 fj_rmul 0.8 fj_gap0 0 fj_fric 0 ...
+                 fj_ten 1.0e20 fj_coh 1.0e20 fj_fa 0 ...
+                 fj_kn 2.3200e12 fj_ks 1.0087e12
+contact method bond gap -1e20 1e20
+ball fix spin velocity range group end1 any group end2 any
+
+call runIt.p2dat  ; Set case in this data file.
+
+list ball attribute displacement
+list ball attribute rotation     ; 0.2 rad ~= 11.459 deg
+list @mi_F1 @mi_F2 @mi_M1 @mi_M2
+list @mi_sqFn @mi_sqFss @mi_sqFst
+list @mi_sqMt @mi_sqMbs @mi_sqMbt
+
+@msOn
+list @mi_F1 @mi_F2 @mi_M1 @mi_M2
+pause
+contact property fj_ten 1.0e-20 fj_coh 1.0e-20 fj_fa 0.0
+title 'Test-TwoGrains (allow breakage by setting strengths to near zero)'
+cycle 1
+@msOn
+list @mi_F1 @mi_F2 @mi_M1 @mi_M2
+
+return
+;EOF: Test-TwoGrains_FJ.p2dat

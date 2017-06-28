@@ -1,0 +1,15 @@
+;fname: dirContents.txt [fistPkg\ExampleProjects\HillContactModel\
+;                        Test-TwoGraniteGrains]
+;
+  Test-linear.p3prj
+  Test-linear.p3dat
+  Test-hill.p3prj
+  Test-hill.p3dat
+  Test-hillMoisture.p3prj
+  Test-hillMoisture.p3dat
+  monitorIt.p3fis
+  monitorIt2.p3fis
+  runIt.p3dat
+  TwoGraniteGrains.xlsx
+;
+;EOF: dirContents.txt

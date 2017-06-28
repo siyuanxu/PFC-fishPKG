@@ -1,0 +1,134 @@
+**********************************************
+* Logging started at 周二 4月 4 20:54:56 2017
+* By pfc3d Version 5.00 Release 030
+* 
+* 
+* Job Title: AG_Linear material, Compression test (confined, Pc = 150000 Pa, eRate = 0.01 s^-1), end of load stage 1.
+**********************************************
+pfc3d>set echo    on
+pfc3d> 
+pfc3d>;#######################################################
+pfc3d>restore ..\AG_Linear-matV.p3sav
+********************************************
+Save file created by
+PFC3D 5.00 Release 030
+周二 4月 4 20:52:25 2017
+Title: AG_Linear material in material vessel.
+Customer: 
+        : 
+********************************************
+pfc3d> 
+pfc3d>call ..\..\fistSrc\ct.fis suppress
+pfc3d>call ctParams.p3dat       suppress
+## Compression-Test Properties:
+     Test being performed in cylindrical cell.
+     ct_testType (test-type code): 0 (confined)
+     ct_Pc (confining pressure): 150000
+     ct_eRate (axial strain rate, positive value): 0.01
+     ct_loadCode (loading-phase code): 1 (multiple stages, specify in function ctPerformStages)
+     Servo-control group:
+       ct_PTol (pressure tolerance): 0.01
+       ct_ARatLimit (equilibrium-ratio limit): 1e-05
+       ct_stepLimit (step limit): 2000000
+       ct_vLimit (servo velocity limit): 0.024
+--- All histories have been deleted and their data erased.
+--- Created history 11 mv_wPx (FISH)
+--- Created history 12 mv_wPy (FISH)
+--- Created history 13 mv_wPz (FISH)
+--- Created history 14 mv_wPr (FISH)
+--- Created history 21 mv_wex (FISH)
+--- Created history 22 mv_wey (FISH)
+--- Created history 23 mv_wez (FISH)
+--- Created history 101 mv_wsd (FISH)
+--- Created history 102 mv_wsa (FISH)
+--- Created history 201 mv_wea (FISH)
+--- Created history 202 mv_wer (FISH)
+--- Created history 203 mv_wev (FISH)
+--- Created history 31 mv_mn (FISH)
+pfc3d> 
+pfc3d>@msOff
+pfc3d>@ctSeatingPhase
+## ctSeatingPhase (entering).
+pfc3d>title [titStr]
+pfc3d>set fish callback -1    _mvsActive
+pfc3d>set fish callback 10.11 _mvsCheckMeasWallOverlap
+pfc3d>set fish callback 10.09 _mvsUpdateRadDiam
+** mvs_applyConfinement (entering with parameters: Pc: 150000, eqPTol: 0.01, ARatLimit: 1e-05, stepLimit: 2000000)
+** mvs_eqP (entering with parameters: eqPTol: 0.01, stepLimit: 2000000)
+pfc3d>cycle 1
+    Cycle      Total    Timestep       Clock
+--------- ---------- ----------- ----------- 
+        1      14981 6.12037E-06 00:00:00:00         1                                    
+--- Global cycle limit of 1 met.
+--- Cycling ended at: 2017-04-04 20:54:56
+pfc3d>solve fishhalt _eqPMet max_cycles @stepLimit
+--- FISH function _eqPMet returned 1.
+--- Cycling ended at: 2017-04-04 20:54:56
+--- Global FishHalt function _eqPMet.
+    Cycle      Total    Timestep       Clock
+--------- ---------- ----------- ----------- 
+        1      14981 6.12037E-06 00:00:00:00         1                                    
+** mvs_eqP (exiting with condition: eqPTol met)
+     [_eqPzeps: 0.000945539]
+     [_eqPreps: 0.000924963]
+** ft_eq (entering with parameters: ARatLimit: 1e-05, stepLimit: 2000000)
+pfc3d>cycle 1
+    Cycle      Total    Timestep       Clock
+--------- ---------- ----------- ----------- 
+        1      14982 6.12036E-06 00:00:00:00         1                                    
+--- Global cycle limit of 1 met.
+--- Cycling ended at: 2017-04-04 20:54:56
+pfc3d>solve aratio @ARatLimit max_cycles @stepLimit
+    Cycle      Total    Timestep Mech Aratio       Clock
+--------- ---------- ----------- ----------- ----------- 
+      486      15468 7.16114E-06  9.5873e-06 00:00:00:03   2000000                         1.0000e-05             
+--- Limit aratio of 1.0000e-05 met in process(es): mech Ball (9.5873e-06),mech Clump (0.0000e+00).
+--- Cycling ended at: 2017-04-04 20:54:59
+** ft_eq (exiting with condition: ARatLimit met) [Mech Aratio: 9.58735e-06]
+** mvs_applyConfinement, Confinement application successful (exiting).
+pfc3d>title [titStr]
+pfc3d>save [fName] localdir
+--- Model saved to file D:/Itasca/pfc3d500/My Projects/fistPkg25/ExampleProjects/MatGen-Linear/CompTest/AG_Linear-ct0.p3sav
+## ctSeatingPhase (exiting).
+pfc3d>@ft_ZeroGrainDisplacement
+pfc3d>ball  attribute displacement (0.0,0.0,0.0)
+--- Attribute displacement initialized in 835 ball(s).
+pfc3d>@ctLoadingPhase
+## ctLoadingPhase (entering).
+pfc3d>title [titStr]
+** _ctApplyAxialStrain (entering) with
+     ct_loadCode = 1
+     e_incr (axial strain increment, e_incr > 0 is opening): -0.0005
+pfc3d>solve fishhalt _aASdone
+--- Global FishHalt function _aASdone.
+    Cycle      Total    Timestep       Clock
+--------- ---------- ----------- ----------- 
+     6404      21872 7.16213E-06 00:00:01:05                                              
+--- FISH function _aASdone returned 1.
+--- Cycling ended at: 2017-04-04 20:56:05
+** _ctApplyAxialStrain (exiting).
+pfc3d>title [titStr]
+pfc3d>save [fName] localdir
+--- Model saved to file D:/Itasca/pfc3d500/My Projects/fistPkg25/ExampleProjects/MatGen-Linear/CompTest/AG_Linear-ct1.p3sav
+pfc3d>title [titStr]
+** _ctApplyAxialStrain (entering) with
+     ct_loadCode = 1
+     e_incr (axial strain increment, e_incr > 0 is opening): 0.0005
+pfc3d>solve fishhalt _aASdone
+--- Global FishHalt function _aASdone.
+    Cycle      Total    Timestep       Clock
+--------- ---------- ----------- ----------- 
+     6405      28277 7.16091E-06 00:00:00:53                                              
+--- FISH function _aASdone returned 1.
+--- Cycling ended at: 2017-04-04 20:56:59
+** _ctApplyAxialStrain (exiting).
+pfc3d>title [titStr]
+pfc3d>save [fName] localdir
+--- Model saved to file D:/Itasca/pfc3d500/My Projects/fistPkg25/ExampleProjects/MatGen-Linear/CompTest/AG_Linear-ct2.p3sav
+## ctLoadingPhase (exiting).
+pfc3d>;#######################################################
+pfc3d> 
+pfc3d>set log off
+**********************************************
+* Logging ended at 周二 4月 4 20:57:00 2017
+**********************************************

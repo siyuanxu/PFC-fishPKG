@@ -1,0 +1,14 @@
+;fname: MatGen-MakePlots.p3dat
+;
+; Generate material-genesis plots, one PNG file for each view.
+; Open the material-genesis project (MatGen.p3prj), and call this
+; plot-generation file via {File: Open into Project: MatGen-MakePlots.p3dat}.
+
+; ####################################
+  plot bitmap view pl-Porosity   size 4000 2400 filename 'pl-Porosity.png'
+  plot bitmap view pl-GSD        size 4000 2400 filename 'pl-GSD.png'
+  plot bitmap view pl-MeanStress size 4000 2400 filename 'pl-MeanStress.png'
+  plot bitmap view pl-MatVessel  size 4000 2400 filename 'pl-MatVessel.png'
+; ####################################
+return
+;EOF: MatGen-MakePlots.p3dat

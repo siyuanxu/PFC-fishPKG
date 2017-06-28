@@ -1,0 +1,38 @@
+;fname: ctParams.p2dat
+
+; ** Compression test at 150 kPa confinement, with load-unload cycle at 0.05% axial strain.
+def ctSetParams
+; Set Compression-Test Parameters.
+  ct_testType = 0
+  ct_Pc = 150.0e3
+  ct_eRate = 0.01
+  ct_loadCode = 1
+end
+;------------------
+def ctPerformStages ; redefinition of this function
+  _ctPerformStage( 1, -0.0005 )
+  _ctPerformStage( 2,  0.0005 )
+end
+@ctSetParams
+@_ctCheckParams
+@ctListProps
+
+; Specify histories to be monitored during the compression test.
+  history reset
+  history nstep 10
+  ; Servo pressures and strains:
+  history add id=11 fish mv_wPx
+  history add id=12 fish mv_wPy
+  history add id=21 fish mv_wex
+  history add id=22 fish mv_wey
+  ; Wall-based stresses and strains:
+  history add id=101 fish mv_wsd
+  history add id=102 fish mv_wsa
+  history add id=201 fish mv_wea
+  history add id=202 fish mv_wer
+  history add id=203 fish mv_wev
+  ; Measurement-based porosity:
+  history add id=31 fish mv_mn
+
+return
+;EOF: ctParams.p2dat

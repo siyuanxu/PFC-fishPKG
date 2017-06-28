@@ -1,0 +1,36 @@
+;fname: monitorIt2.p3fis
+;------------------------------------------------
+def mi_init
+  _miCP = contact.find( 'ball-ball', 1, 2 )
+  _miBP2 = ball.find( 2 )
+  
+  command
+    history nstep 1
+    history add id 1 fish mi_gc 
+    history add id 2 fish mi_Fm
+    history add id 3 fish mi_DispTop
+  end_command
+end
+;**********
+def mi_gc  ; Contact gap (gc) where gc > 0 is open
+  if ( _miCP # null ) then
+    mi_gc = contact.gap(_miCP)
+  else
+    mi_gc = 0.0
+  end_if
+end
+;**********
+def mi_Fm  ; moisture force (Fm) where Fm > 0 is suction
+  if ( _miCP # null ) then
+    mi_Fm = contact.prop(_miCP, 'mois_force')
+  else
+    mi_Fm = 0.0
+  end_if
+end
+;**********
+def mi_DispTop
+  mi_DispTop = ball.disp( _miBP2, 2 )
+end
+;------------------------------------------------
+return
+;EOF: monitorIt2.p3fis

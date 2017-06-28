@@ -1,0 +1,116 @@
+**********************************************
+* Logging started at 周一 4月 10 17:09:32 2017
+* By pfc3d Version 5.00 Release 030
+* 
+* 
+* Job Title: 
+**********************************************
+pfc3d>set echo    on
+pfc3d> 
+pfc3d>;#######################################################
+pfc3d>restore ..\SS_ContactBonded-mat.p3sav
+********************************************
+Save file created by
+PFC3D 5.00 Release 030
+周一 4月 10 17:04:11 2017
+Title: SS_ContactBonded material removed from material vessel.
+Customer: 
+        : 
+********************************************
+pfc3d> 
+pfc3d>call ..\..\fistSrc\ck.fis suppress
+pfc3d>call ..\..\fistSrc\tt.fis suppress
+pfc3d>call ttParams.p3dat       suppress
+## Direct-Tension Test Properties:
+     tt_tg (grip thickness): 0.005
+     tt_eRate (axial strain rate, positive value): 0.05
+     tt_loadCode (loading-phase code): 0 (single stage)
+     tt_loadFac (load-termination factor): 0.8
+--- All histories have been deleted and their data erased.
+--- Created history 101 mv_msa (FISH)
+--- Created history 201 mv_mea (FISH)
+--- Created history 41 ck_nAll (FISH)
+--- Created history 42 ck_nCBt (FISH)
+--- Created history 43 ck_nCBs (FISH)
+pfc3d> 
+pfc3d>@msOff
+pfc3d>@ckInit
+pfc3d>set fish callback bond_break _ckBondBreak
+pfc3d>set fish callback 10.10      _ckUpdate
+pfc3d>@ttSetupPhase
+## ttSetupPhase (entering).
+pfc3d>title [titStr]
+pfc3d>ball group ttGripNot slot 1
+--- Group ttGripNot assigned to 1276 Balls in slot 1.
+pfc3d>ball group ttGripTop    slot 1 range z [MinTop] [MaxTop]
+--- Group ttGripTop assigned to 107 Balls in slot 1.
+pfc3d>ball group ttGripBottom slot 1 range z [MinBot] [MaxBot]
+--- Group ttGripBottom assigned to 113 Balls in slot 1.
+pfc3d>ball attribute velocity (0.0,0.0,0.0) spin (0.0,0.0,0.0)                        range group ttGripTop any group ttGripBottom any
+--- Attribute velocity initialized in 220 ball(s).
+--- Attribute spin initialized in 220 ball(s).
+pfc3d>ball fix velocity spin            range group ttGripTop any group ttGripBottom any
+--- Fixity conditions changed in 220 balls.
+pfc3d>title [titStr]
+pfc3d>save [fName] localdir
+--- Model saved to file D:/Itasca/pfc3d500/My Projects/fistPkg25/ExampleProjects/MatGen-ContactBonded/TenTest/SS_ContactBonded-tt0.p3sav
+## ttSetupPhase (exiting).
+pfc3d>@ft_ZeroGrainDisplacement
+pfc3d>ball  attribute displacement (0.0,0.0,0.0)
+--- Attribute displacement initialized in 1276 ball(s).
+pfc3d>@ttLoadingPhase
+## ttLoadingPhase (entering).
+pfc3d>title [titStr]
+** _ttApplyAxialStrain (entering) with
+     tt_loadCode = 0
+     tt_loadFac (load-termination factor): 0.8
+pfc3d>ball attribute zvelocity [ 1.0*gripVel] range group ttGripTop
+--- Attribute zvelocity initialized in 107 ball(s).
+pfc3d>ball attribute zvelocity [-1.0*gripVel] range group ttGripBottom
+--- Attribute zvelocity initialized in 113 ball(s).
+pfc3d>set fish callback 42.11        _ttUpdate_msaMax
+pfc3d>solve fishhalt _aASTPPdone0
+--- Global FishHalt function _aASTPPdone0.
+    Cycle      Total    Timestep       Clock
+--------- ---------- ----------- ----------- 
+        1       1565 6.91310E-07 00:00:00:00                                              
+--- FISH function _aASTPPdone0 returned 1.
+--- Cycling ended at: 2017-04-10 17:09:33
+pfc3d>solve fishhalt _aASTPPdone
+--- Global FishHalt function _aASTPPdone.
+    Cycle      Total    Timestep       Clock
+--------- ---------- ----------- ----------- 
+     6955       8520 8.56044E-07 00:00:00:21                                              
+--- FISH function _aASTPPdone returned 1.
+--- Cycling ended at: 2017-04-10 17:09:54
+pfc3d>set fish callback 42.11 remove _ttUpdate_msaMax
+pfc3d>ball attribute zvelocity [ 1.0*gripVel] range group ttGripTop
+--- Attribute zvelocity initialized in 107 ball(s).
+pfc3d>ball attribute zvelocity [-1.0*gripVel] range group ttGripBottom
+--- Attribute zvelocity initialized in 113 ball(s).
+** _ttApplyAxialStrain (exiting).
+pfc3d>title [titStr]
+pfc3d>save [fName] localdir
+--- Model saved to file D:/Itasca/pfc3d500/My Projects/fistPkg25/ExampleProjects/MatGen-ContactBonded/TenTest/SS_ContactBonded-tt1.p3sav
+## ttLoadingPhase (exiting).
+pfc3d>@ckListData
+## Crack Data --- a crack is a bond breakage [# is "number of"]:
+     Geometry (and orphan status) of all cracks IS fully updated.
+     Type and failure mode of all cracks:
+       ck_nAll              (# cracks): 92
+       ck_nOrphans (# orphaned cracks): 0
+         The position and normal direction of an orphaned crack are frozen at their last updated value.
+       ck_nCBt (# contact-bonded  tensile cracks): 92
+       ck_nCBs (# contact-bonded  shear   cracks): 0
+       ck_nPBt (# parallel-bonded tensile cracks): 0
+       ck_nPBs (# parallel-bonded shear   cracks): 0
+       ck_nFJt (# flat-jointed    tensile cracks): 0
+       ck_nFJs (# flat-jointed    shear   cracks): 0
+       ck_nSJt (# smooth-jointed  tensile cracks): 0
+       ck_nSJs (# smooth-jointed  shear   cracks): 0
+pfc3d>;#######################################################
+pfc3d> 
+pfc3d>set log off
+**********************************************
+* Logging ended at 周一 4月 10 17:09:54 2017
+**********************************************

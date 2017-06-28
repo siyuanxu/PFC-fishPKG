@@ -1,0 +1,46 @@
+;fname: dirContents.txt [fistPkgN], where N is fistPkg version number
+;
+  fistPkg-README.txt
+  fistPkg-publicMods.txt
+
+  Documentation\ [N is the version number of the PFC 5.0 FISHTank]
+    fistPkg-Cover.pdf
+    fistPkg-Documentation.pdf
+    MatModelingSupport[fistPkgN].pdf
+    MatModelingSupport[fistPkgN]-ExampleMats{1,2,3}.pdf
+    MatModelingSupport[fistPkgN]-Talk.pdf
+    Potyondy(2015)-BPM_AsATool.pdf
+    HillContactModel[ver4].pdf
+    FlatJointContactModel[ver1].pdf
+
+  ExampleProjects\
+    fistSrc                 {FISH source code}
+    //
+    MatGen&Test_AllMats-RUN.{p2,p3}{prj,dvr}
+    MatGen-Linear         {linear material}
+      CompTest {compression test}
+    MatGen-ContactBonded  {contact-bonded material}
+      CompTest     {compression test}
+      DiamCompTest {diametral-compression test}
+      TenTest      {direct-tension test}
+    MatGen-ParallelBonded {parallel-bonded material}
+      CompTest     {compression test}
+      DiamCompTest {diametral-compression test}
+      TenTest      {direct-tension test}
+    MatGen-FlatJointed    {flat-jointed material}
+      CompTest     {compression test}
+      DiamCompTest {diametral-compression test}
+      TenTest      {direct-tension test}
+    MatGen-Hill           {user-defined material (hill material)}
+      CompTest {compression test}
+    //
+    HillContactModel
+      Test-TwoGraniteGrains      {Test: Two Granite Grains}
+      Test-AssemblyGraniteGrains {Test: Assembly of Granite Grains}
+      MatGen-Class5              {Test: Material-Behavior Study}
+        CompTest {compression test}
+    FlatJointContactModel
+      Test-TwoGrains        {Test: Two Grains}
+      Test-InterlockedGrain {Test: Interlocked Grain}
+;
+;EOF: dirContents.txt

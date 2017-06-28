@@ -1,0 +1,10 @@
+;fname: dirContents.txt [fistPkg\ExampleProjects\HillContactModel\
+;                        MatGen-Class5\CompTest]
+;
+  Compression Test project
+    PFC3D:
+      CompTest-Class5.p3prj
+      CompTest-Class5.p3dvr
+      ctParams-Class5.p3dat
+;
+;EOF: dirContents.txt

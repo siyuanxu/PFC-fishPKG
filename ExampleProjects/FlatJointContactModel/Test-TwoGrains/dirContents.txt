@@ -1,0 +1,16 @@
+;fname: dirContents.txt [fistPkg\ExampleProjects\FlatJointContactModel\
+;                        Test-TwoGrains]
+;
+  Test-TwoGrains_FJ.p3prj
+  Test-TwoGrains_FJ.p3dat
+  Test-TwoGrains_PB.p3prj
+  Test-TwoGrains_PB.p3dat
+  runIt.p3dat
+  Test-TwoGrains_FJ.p2prj
+  Test-TwoGrains_FJ.p2dat
+  Test-TwoGrains_PB.p2prj
+  Test-TwoGrains_PB.p2dat
+  runIt.p2dat
+  monitorIt.fis
+;
+;EOF: dirContents.txt
