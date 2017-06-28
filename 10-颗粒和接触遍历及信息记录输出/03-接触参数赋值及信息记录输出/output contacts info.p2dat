@@ -1,0 +1,45 @@
+restore bonded
+
+;----------------------------------------------------------------------
+def output_contacts_info
+    array Contact_info(10000)
+    ;记录与竖向墙体碰撞颗粒信息
+    
+    i=1
+    Contact_info(i)=' TITLE = "Information of all contacts"'
+    i=i+1
+    Contact_info_name_str = ' VARIABLES= "pos_x"  "pos_y" "model_name"'
+    Contact_info_name_str = Contact_info_name_str + '"kn" "ks" '
+    Contact_info_name_str = Contact_info_name_str + '"pb_kn" "pb_ks" '
+    Contact_info_name_str = Contact_info_name_str + '"pb_ten" "pb_coh" '
+    Contact_info_name_str = Contact_info_name_str + '"pb_fa" "pb_rmul" '
+    Contact_info_name_str = Contact_info_name_str + '"normal_x" "normal_y" '
+    Contact_info_name_str = Contact_info_name_str + '"shear_x" "shear_y" '
+    Contact_info_name_str = Contact_info_name_str + '"f_global_x" "f_global_y" '
+    Contact_info_name_str = Contact_info_name_str + '"f_local_x" "f_local_y" '
+    Contact_info(i) = Contact_info_name_str + '"cf_normal" "cf_shear" '
+    
+    loop foreach local cp contact.list('ball-ball')
+        i=i+1
+        Contact_info_str = '  ' + string(contact.pos.x(cp)) + '  ' + string(contact.pos.y(cp)) + '  ' + string(contact.model(cp))
+        Contact_info_str = Contact_info_str + '  ' + string(contact.prop(cp,'kn')) + '  ' + string(contact.prop(cp,'ks'))
+        Contact_info_str = Contact_info_str + '  ' + string(contact.prop(cp,'pb_kn')) + '  ' + string(contact.prop(cp,'pb_ks'))
+        Contact_info_str = Contact_info_str + '  ' + string(contact.prop(cp,'pb_ten')) + '  ' + string(contact.prop(cp,'pb_coh'))
+        Contact_info_str = Contact_info_str + '  ' + string(contact.prop(cp,'pb_fa')) + '  ' + string(contact.prop(cp,'pb_rmul'))
+        Contact_info_str = Contact_info_str + '  ' + string(contact.normal.x(cp)) + '  ' + string(contact.normal.y(cp))
+        Contact_info_str = Contact_info_str + '  ' + string(contact.shear.x(cp)) + '  ' + string(contact.shear.y(cp))
+        Contact_info_str = Contact_info_str + '  ' + string(contact.force.global.x(cp)) + '  ' + string(contact.force.global.y(cp))
+        Contact_info_str = Contact_info_str + '  ' + string(contact.force.local.x(cp)) + '  ' + string(contact.force.local.y(cp))
+        Contact_info(i) = Contact_info_str + '  ' + string(contact.force.normal(cp)) + '  ' + string(contact.force.shear(cp))
+    end_loop
+    
+    max_i=i
+    
+    Contact_info_file_name = 'Contact_info.dat'
+    status = file.open(Contact_info_file_name, 1, 1)
+    status = file.write(Contact_info,max_i)
+    status = file.close()
+end
+@output_contacts_info
+;----------------------------------------------------------------------
+

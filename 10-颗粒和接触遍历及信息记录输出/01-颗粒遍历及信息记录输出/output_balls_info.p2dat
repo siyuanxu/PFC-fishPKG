@@ -1,0 +1,62 @@
+restore unbonded
+
+;----------------------------------------------------------------------
+def output_balls_info
+    array Ball_info(100)
+    ;记录与竖向墙体碰撞颗粒信息
+    
+    i=1
+    Ball_info(i)=' TITLE = "Information of all balls '
+    i=i+1
+    Ball_info_name_str = ' VARIABLES= "pos_x"  "pos_y" "rad"'
+    Ball_info_name_str = Ball_info_name_str + '"disp_x" "disp_y" "rotation" '
+    Ball_info_name_str = Ball_info_name_str + '"vel_x" "vel_y" "spin_z" '
+    Ball_info_name_str = Ball_info_name_str + '"mass" "mass_real" '
+    Ball_info_name_str = Ball_info_name_str + '"moi" "moi_real" '
+    Ball_info_name_str = Ball_info_name_str + '"f_app_x" "f_app_y" '
+    Ball_info_name_str = Ball_info_name_str + '"f_contact_x" "f_contact_y" '
+    Ball_info_name_str = Ball_info_name_str + '"f_unbal_x" "f_unbal_y" '
+    Ball_info_name_str = Ball_info_name_str + '"m_app_z" '
+    Ball_info_name_str = Ball_info_name_str + '"m_contact_z" '
+    Ball_info_name_str = Ball_info_name_str + '"m_unbal_z" '
+    Ball_info_name_str = Ball_info_name_str + '"stress_xx" "stress_xy" '
+    Ball_info_name_str = Ball_info_name_str + '"density" "damp" '
+    Ball_info_name_str = Ball_info_name_str + '"kn" "ks" "fric" '
+    Ball_info(i)       = Ball_info_name_str + '"id" "group"'
+    loop foreach local bp ball.list
+        ;if ball.radius(bp) >= 0.6 then
+        ;    continue
+        ;endif
+        ;if ball.pos.x(bp)^2 < 4 then
+        ;if ball.radius(bp) < 0.6 then
+            i=i+1
+            ;pos_vec = ball.pos(bp) ;ball.pos(bp,1,2)
+            ;Ball_info_str = '  ' + string(ball.pos(bp,1)) + '  ' + string(ball.pos(bp,2))  + '  ' + string(ball.radius(bp))
+            Ball_info_str = '  ' + string(ball.pos.x(bp)) + '  ' + string(ball.pos.y(bp))  + '  ' + string(ball.radius(bp))
+            Ball_info_str = Ball_info_str + '  ' + string(ball.disp.x(bp)) + '  ' + string(ball.disp.y(bp)) + '  ' + string(ball.rotation(bp)) 
+            Ball_info_str = Ball_info_str + '  ' + string(ball.vel.x(bp)) + '  ' + string(ball.vel.y(bp)) + '  ' + string(ball.spin.z(bp))
+            Ball_info_str = Ball_info_str + '  ' + string(ball.mass(bp)) + '  ' + string(ball.mass.real(bp))
+            Ball_info_str = Ball_info_str + '  ' + string(ball.moi(bp)) + '  ' + string(ball.moi.real(bp))
+            Ball_info_str = Ball_info_str + '  ' + string(ball.force.app.x(bp)) + '  ' + string(ball.force.app.y(bp))
+            Ball_info_str = Ball_info_str + '  ' + string(ball.force.contact.x(bp)) + '  ' + string(ball.force.contact.y(bp))
+            Ball_info_str = Ball_info_str + '  ' + string(ball.force.unbal.x(bp)) + '  ' + string(ball.force.unbal.y(bp))
+            Ball_info_str = Ball_info_str + '  ' + string(ball.moment.app.z(bp))
+            Ball_info_str = Ball_info_str + '  ' + string(ball.moment.contact.z(bp))
+            Ball_info_str = Ball_info_str + '  ' + string(ball.moment.unbal.z(bp))
+            Ball_info_str = Ball_info_str + '  ' + string(ball.stress.xx(bp)) + '  ' + string(ball.stress.xy(bp))
+            Ball_info_str = Ball_info_str + '  ' + string(ball.density(bp)) + '  ' + string(ball.damp(bp))
+            Ball_info_str = Ball_info_str + '  ' + string(ball.prop(bp,'kn')) + '  ' + string(ball.prop(bp,'ks')) + '  ' + string(ball.prop(bp,'fric'))
+            Ball_info(i)  = Ball_info_str + ' ' + string(ball.id(bp)) + '  ' + string(ball.group(bp))
+        ;endif
+    end_loop
+    
+    max_i=i
+    
+    Ball_info_file_name = 'Ball_info.dat'
+    status = file.open(Ball_info_file_name, 1, 1)
+    status = file.write(Ball_info,max_i)
+    status = file.close()
+end
+@output_balls_info
+;----------------------------------------------------------------------
+

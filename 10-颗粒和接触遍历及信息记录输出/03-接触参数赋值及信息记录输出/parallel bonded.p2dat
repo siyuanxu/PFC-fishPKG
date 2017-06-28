@@ -1,0 +1,49 @@
+restore unbonded
+
+def add_bond_property
+    array deform_arr(2,2) pb_deform_arr(2,2) bond_arr(1,2)
+    
+    deform_arr(1,1) = 'emod'
+    deform_arr(1,2) = 70.0e9
+    deform_arr(2,1) = 'kratio'
+    deform_arr(2,2) = 2.0
+    
+    pb_deform_arr(1,1) = 'emod'
+    pb_deform_arr(1,2) = 65.0e9
+    pb_deform_arr(2,1) = 'kratio'
+    pb_deform_arr(2,2) = 1.0
+    
+    bond_arr(1,1) = 'gap'
+    bond_arr(1,2) = 0.1*rlo
+    
+    contact_num = contact.num('ball-ball')
+    count = 0
+    loop foreach local cp contact.list('ball-ball')
+        
+        pbond_ten = 50.0e6 + 10.0e6*math.random.gauss 
+        pbond_coh = pbond_ten
+        
+        contact.model(cp) = 'linearpbond' ;'linearcbond'
+        
+        contact.method(cp,'deformability',deform_arr)
+        contact.method(cp,'pb_deformability',deform_arr)
+        contact.method(cp,'bond',bond_arr)
+        
+        ;contact.prop(cp,'kn') = 2e6
+        ;contact.prop(cp,'ks') = 1e6
+        ;contact.prop(cp,'pb_kn') = 2e6
+        ;contact.prop(cp,'pb_ks') = 2e6
+        
+        contact.prop(cp,'pb_ten') = pbond_ten
+        contact.prop(cp,'pb_coh') = pbond_coh
+        contact.prop(cp,'pb_rmul') = 1.0
+        contact.prop(cp,'pb_fa') = 0.0
+        
+        count = count + 1
+        
+    endloop
+end
+@add_bond_property
+list @count @contact_num
+
+save bonded

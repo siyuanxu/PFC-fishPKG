@@ -1,0 +1,56 @@
+restore unbonded
+pause key
+
+;----------------------------------------------------------------------------------
+def make_clusters
+
+    ;ball_maxnum_in_cluster = 7
+    ball_total_num_in_clusters = 100
+    ;total_num = ball.num
+    
+    count = 0
+    total_num = 0
+    cluster_index = 0
+	loop foreach local bp ball.list
+        if ball.group(bp) # 'None' then
+            continue
+        endif
+        
+        cluster_index = cluster_index + 1
+        ball_group_name = string.build('cluster_%1', cluster_index)
+        ball.group(bp) = ball_group_name
+        count = count + 1
+        total_num = total_num + 1
+        if total_num >= ball_total_num_in_clusters then
+            exit
+        endif
+        
+        ball_maxnum_in_cluster = int(7 * math.random.uniform) + 1
+        
+        loop foreach local cp ball.contactmap(bp,contact.typeid('ball-ball'))
+            if count >= ball_maxnum_in_cluster then
+                count = 0
+                exit loop
+            endif
+            
+            if contact.end1(cp) = bp then
+                bp_other = contact.end2(cp)
+            else
+                bp_other = contact.end1(cp)
+            endif
+            
+            if ball.group(bp_other) # 'None' then
+                continue
+            endif
+            ball.group(bp_other) = ball_group_name
+            count = count + 1
+            total_num = total_num + 1
+            if total_num >= ball_total_num_in_clusters then
+                exit
+            endif
+		end_loop
+	end_loop
+end
+;----------------------------------------------------------------------------------
+@make_clusters
+list @cluster_index

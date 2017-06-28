@@ -1,0 +1,46 @@
+restore unbonded
+pause key
+
+;----------------------------------------------------------------------------------
+def contact_search_method_2
+    count = 0
+	loop foreach local bp ball.list
+        geom_set_name = string.build('ball_%1',bp)
+        lp = label.create(ball.pos(bp)) 
+        label.text(lp) = geom_set_name
+        command
+        pause key
+        endcommand
+        ;contact_typeid = contact.typeid('ball-ball')
+        loop foreach local cp ball.contactmap(bp) ;ball.contactmap(bp,contact_typeid)
+            bp1 = contact.end1(cp)
+            bp2 = contact.end2(cp)
+            node_pos_vec1 = ball.pos(bp1)
+            if type.pointer(bp2) = 'ball' then
+                node_pos_vec2 = ball.pos(bp2)
+            else
+                node_pos_vec2 = contact.pos(cp)
+            endif
+            ;geom_set_name = 'contact_' + string(cp)
+            geom_set_name = string.build('contact_%1',cp)
+            gp = geom.set.create(geom_set_name)
+            np1 = geom.node.create(gp,node_pos_vec1) 
+            np2 = geom.node.create(gp,node_pos_vec2) 
+            ep = geom.edge.create(gp,np1,np2)
+            
+            lp = label.create(contact.pos(cp)) 
+            label.text(lp) = geom_set_name
+            command
+        pause key
+        endcommand
+            count = count + 1
+            
+            ;command
+            ;    pause key
+            ;endcommand
+		end_loop
+	end_loop
+end
+;----------------------------------------------------------------------------------
+@contact_search_method_2
+list @count
